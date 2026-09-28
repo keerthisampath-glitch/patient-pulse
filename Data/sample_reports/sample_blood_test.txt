@@ -1,0 +1,18 @@
+====================================================================
+               METROPOLIS CLINICAL LABORATORY REPORT
+====================================================================
+Patient Name: John Doe                  Age/Sex: 38 / Male
+Referred By: Dr. A. K. Sharma, MD       Date: 28-Aug-2026
+--------------------------------------------------------------------
+TEST NAME                       RESULT       UNIT         REFERENCE RANGE
+--------------------------------------------------------------------
+HEMOGLOBIN (Hb)                 10.2         g/dL         13.0 - 17.0 (LOW)
+TOTAL RBC COUNT                 3.8          10^6/uL      4.5 - 5.5   (LOW)
+FASTING BLOOD GLUCOSE           142          mg/dL        70 - 99     (HIGH)
+TOTAL CHOLESTEROL               228          mg/dL        < 200       (HIGH)
+SERUM TSH (THYROID)             6.8          uIU/mL       0.4 - 4.2   (HIGH)
+SERUM CREATININE                0.95         mg/dL        0.7 - 1.3   (NORMAL)
+SERUM SGPT (ALT)                28           U/L          7 - 56      (NORMAL)
+--------------------------------------------------------------------
+Impression: Mild Anemia, Elevated Fasting Blood Glucose & Borderline TSH.
+====================================================================

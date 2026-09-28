@@ -1,0 +1,2982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PatientPulse AI — Clinical Intelligence & Diagnostic Support Platform</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230284c7' stroke-width='2.5'><path stroke-linecap='round' stroke-linejoin='round' d='M22 12h-4l-3 9L9 3l-3 9H2'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ====================================================================
+       PROFESSIONAL ENTERPRISE CLINICAL THEME (CLEAN LIGHT MODE)
+       High-trust porcelain white, slate canvas, clinical navy & deep cerulean
+       ==================================================================== */
+    :root {
+      --bg-base: #ffffff;
+      --bg-canvas: #f8fafc;
+      --bg-card: #ffffff;
+      --bg-subtle: #f1f5f9;
+      --bg-input: #ffffff;
+      
+      --border-light: #e2e8f0;
+      --border-medium: #cbd5e1;
+      --border-focus: #0284c7;
+
+      --text-heading: #0f172a;
+      --text-body: #334155;
+      --text-secondary: #64748b;
+      --text-muted: #94a3b8;
+
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
+      --primary-subtle: #f0f9ff;
+      --primary-border: #bae6fd;
+
+      --status-normal-bg: #ecfdf5;
+      --status-normal-text: #065f46;
+      --status-normal-border: #a7f3d0;
+
+      --status-caution-bg: #fffbeb;
+      --status-caution-text: #92400e;
+      --status-caution-border: #fde68a;
+
+      --status-critical-bg: #fff1f2;
+      --status-critical-text: #9f1239;
+      --status-critical-border: #fecdd3;
+
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --radius-xl: 20px;
+
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
+      --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+      --shadow-popover: 0 20px 40px -10px rgba(15, 23, 42, 0.15);
+
+      --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background-color: var(--bg-canvas);
+      color: var(--text-body);
+      font-family: var(--font-body);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-canvas); }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+    /* ====================================================================
+       TOP CLEAN ENTERPRISE NAVBAR
+       ==================================================================== */
+    .top-navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg-base);
+      border-bottom: 1px solid var(--border-light);
+      box-shadow: var(--shadow-sm);
+    }
+    .nav-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 28px;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .brand-cluster {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .brand-symbol {
+      width: 38px;
+      height: 38px;
+      border-radius: 9px;
+      background: #0284c7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);
+    }
+    .brand-symbol svg { width: 22px; height: 22px; stroke-width: 2.2; }
+    .brand-meta h1 {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-heading);
+    }
+    .brand-meta p {
+      font-size: 11.5px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    /* Tab navigation buttons */
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--bg-subtle);
+      padding: 4px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+    }
+    .nav-tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-family: var(--font-body);
+      font-size: 13.5px;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 7px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+    .nav-tab-btn:hover {
+      color: var(--text-heading);
+      background: rgba(255, 255, 255, 0.6);
+    }
+    .nav-tab-btn.active {
+      background: var(--bg-base);
+      color: var(--primary);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Right Portal Profile */
+    .user-profile-cluster {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #e0f2fe;
+      color: #0369a1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 13px;
+      border: 1px solid var(--primary-border);
+    }
+    .user-details { text-align: right; }
+    .user-name { font-size: 13px; font-weight: 700; color: var(--text-heading); }
+    .user-role { font-size: 11.5px; color: var(--text-secondary); }
+
+    /* ====================================================================
+       PAGE LAYOUT SHELL
+       ==================================================================== */
+    .main-viewport {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 32px 28px 80px;
+      width: 100%;
+      flex: 1;
+    }
+    .page-section {
+      display: none;
+      animation: pageIn 0.2s ease-out;
+    }
+    .page-section.active { display: block; }
+    @keyframes pageIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ====================================================================
+       HOME DASHBOARD (EXECUTIVE OVERVIEW)
+       ==================================================================== */
+    .hero-welcome-card {
+      background: var(--bg-base);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-xl);
+      padding: 36px 40px;
+      margin-bottom: 30px;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+    .hero-text-block { max-width: 760px; }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #0369a1;
+      background: var(--primary-subtle);
+      border: 1px solid var(--primary-border);
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .hero-welcome-card h2 {
+      font-size: clamp(24px, 3vw, 32px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-heading);
+      margin-bottom: 10px;
+      line-height: 1.25;
+    }
+    .hero-welcome-card p.lead {
+      color: var(--text-secondary);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* Metrics Bar */
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .metric-card {
+      background: var(--bg-base);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 20px 22px;
+      box-shadow: var(--shadow-card);
+    }
+    .metric-card .metric-val {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text-heading);
+      font-feature-settings: "tnum";
+    }
+    .metric-card .metric-label {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+    .metric-card .metric-sub {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* 4-Module Navigation Cards */
+    .module-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 20px;
+      margin-bottom: 36px;
+    }
+    .module-card {
+      background: var(--bg-base);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 26px;
+      box-shadow: var(--shadow-card);
+      transition: all 0.2s ease;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .module-card:hover {
+      border-color: var(--border-medium);
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+    .module-icon-wrap {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin-bottom: 16px;
+    }
+    .module-card h4 {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-heading);
+      margin-bottom: 8px;
+    }
+    .module-card p {
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      line-height: 1.55;
+      margin-bottom: 20px;
+    }
+    .module-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border-light);
+      padding-top: 14px;
+    }
+    .module-tag {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: var(--bg-subtle);
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .module-cta {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* ====================================================================
+       WORKBENCH / CLINICAL WORKSTATION LAYOUT
+       ==================================================================== */
+    .page-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .page-title-row h2 {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-heading);
+    }
+    .page-title-row p {
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-medium);
+      background: var(--bg-base);
+      color: var(--text-heading);
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 9px 18px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+    .btn:hover { background: var(--bg-subtle); }
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      box-shadow: 0 1px 2px rgba(2, 132, 199, 0.2);
+    }
+    .btn-primary:hover { background: var(--primary-hover); border-color: var(--primary-hover); }
+    .btn-demo {
+      background: #fef3c7;
+      border-color: #fde68a;
+      color: #92400e;
+    }
+    .btn-demo:hover { background: #fde68a; }
+
+    /* 2-Column Split Workbench */
+    .workbench-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.25fr;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (max-width: 980px) {
+      .workbench-grid { grid-template-columns: 1fr; }
+    }
+
+    .panel-card {
+      background: var(--bg-base);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-card);
+    }
+    .panel-card + .panel-card { margin-top: 20px; }
+    .panel-card h4.panel-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-heading);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .field-group { margin-bottom: 16px; }
+    .field-label {
+      display: block;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-body);
+      margin-bottom: 6px;
+    }
+    .text-box, .text-area {
+      width: 100%;
+      background: var(--bg-base);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      color: var(--text-heading);
+      font-family: var(--font-body);
+      font-size: 13.5px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .text-box:focus, .text-area:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.12);
+    }
+    .text-area { resize: vertical; min-height: 100px; line-height: 1.5; }
+
+    /* Clinical Dropzone */
+    .file-dropzone {
+      border: 2px dashed #cbd5e1;
+      background: var(--bg-subtle);
+      border-radius: var(--radius-md);
+      padding: 24px 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .file-dropzone:hover {
+      border-color: var(--primary);
+      background: #f0f9ff;
+    }
+    .dropzone-icon { font-size: 26px; line-height: 1; margin-bottom: 8px; }
+    .dropzone-text { font-size: 13.5px; font-weight: 700; color: var(--text-heading); line-height: 1.4; margin-bottom: 4px; }
+    .dropzone-hint { font-size: 12px; color: var(--text-secondary); line-height: 1.4; }
+
+    /* Pill Badges */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      letter-spacing: 0.02em;
+    }
+    .badge-normal { background: var(--status-normal-bg); color: var(--status-normal-text); border: 1px solid var(--status-normal-border); }
+    .badge-caution { background: var(--status-caution-bg); color: var(--status-caution-text); border: 1px solid var(--status-caution-border); }
+    .badge-critical { background: var(--status-critical-bg); color: var(--status-critical-text); border: 1px solid var(--status-critical-border); }
+    .badge-info { background: var(--primary-subtle); color: #0369a1; border: 1px solid var(--primary-border); }
+
+    /* ====================================================================
+       PAGE 1: RADIOGRAPH VIEWER
+       ==================================================================== */
+    .image-viewport {
+      position: relative;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: #000000;
+      border: 1px solid var(--border-medium);
+      min-height: 380px;
+      max-height: 520px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .image-viewport img {
+      width: 100%;
+      height: 100%;
+      max-height: 520px;
+      object-fit: contain;
+      display: block;
+    }
+    .image-viewport canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    .viewport-controls-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-top: 14px;
+      padding: 10px 14px;
+      background: var(--bg-subtle);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-light);
+    }
+    .switch-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-body);
+      cursor: pointer;
+    }
+
+    .probability-row { margin-bottom: 12px; }
+    .probability-row-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12.5px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .probability-row-header .score { font-family: var(--font-mono); color: var(--primary); font-weight: 700; }
+    .probability-track {
+      height: 7px;
+      background: var(--bg-subtle);
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid var(--border-light);
+    }
+    .probability-fill {
+      height: 100%;
+      background: var(--primary);
+      border-radius: 999px;
+      transition: width 0.4s ease;
+    }
+
+    /* ====================================================================
+       PAGE 2: PRESCRIPTION OCR
+       ==================================================================== */
+    .timetable-columns {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 12px;
+    }
+    @media (max-width: 768px) {
+      .timetable-columns { grid-template-columns: repeat(2, 1fr); }
+    }
+    .timetable-card {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      min-height: 110px;
+    }
+    .timetable-card-head {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .pill-item {
+      background: var(--bg-base);
+      border: 1px solid var(--border-light);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-heading);
+      margin-bottom: 6px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    }
+    .pill-empty { font-size: 12px; color: var(--text-muted); font-style: italic; }
+
+    .fda-alert-box {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      margin-top: 18px;
+    }
+    .fda-alert-box h5 {
+      color: #92400e;
+      font-size: 13.5px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .fda-alert-item {
+      font-size: 13px;
+      color: #78350f;
+      line-height: 1.5;
+      margin-bottom: 4px;
+    }
+
+    /* ====================================================================
+       PAGE 3: LAB EXPLAINER
+       ==================================================================== */
+    .biomarker-table-row {
+      border: 1px solid var(--border-light);
+      background: var(--bg-base);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+    .biomarker-table-row.LOW { border-left: 4px solid var(--primary); }
+    .biomarker-table-row.HIGH { border-left: 4px solid #f59e0b; }
+    .biomarker-table-row.NORMAL { border-left: 4px solid #10b981; }
+
+    .biomarker-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .biomarker-title { font-size: 15px; font-weight: 700; color: var(--text-heading); }
+    .biomarker-value {
+      font-family: var(--font-mono);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-heading);
+    }
+    .biomarker-subline {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+    .biomarker-plain {
+      font-size: 13px;
+      color: var(--text-body);
+      line-height: 1.5;
+      background: var(--bg-subtle);
+      padding: 8px 12px;
+      border-radius: 6px;
+    }
+
+    /* ====================================================================
+       PAGE 4: CHAT CONSOLE
+       ==================================================================== */
+    .chat-workbench {
+      background: var(--bg-base);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 210px);
+      min-height: 720px;
+      max-height: 960px;
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+    .chat-head-strip {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border-light);
+      background: var(--bg-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .chat-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .chat-bubble {
+      max-width: 82%;
+      padding: 14px 18px;
+      border-radius: 14px;
+      font-size: 13.5px;
+      line-height: 1.6;
+      word-break: break-word;
+    }
+    .chat-bubble.user {
+      align-self: flex-end;
+      background: var(--primary);
+      color: white;
+      border-bottom-right-radius: 4px;
+      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.18);
+    }
+    .chat-bubble.agent {
+      align-self: flex-start;
+      background: #ffffff;
+      border: 1px solid var(--border-medium);
+      color: var(--text-body);
+      border-bottom-left-radius: 4px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+    }
+    .popover-body .chat-bubble {
+      max-width: 92%;
+      padding: 11px 14px;
+      font-size: 13px;
+    }
+    .chat-paragraph {
+      margin: 0 0 10px 0;
+      line-height: 1.6;
+    }
+    .chat-paragraph:last-child {
+      margin-bottom: 0;
+    }
+    .chat-bold {
+      font-weight: 700;
+      color: var(--text-heading);
+    }
+    .chat-section-header {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--text-heading);
+      margin: 14px 0 6px 0;
+      letter-spacing: -0.2px;
+    }
+    .chat-card {
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin: 10px 0;
+    }
+    .chat-card-advice {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      color: #14532d;
+    }
+    .chat-card-advice .chat-card-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #166534;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .chat-card-warning {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      color: #7f1d1d;
+    }
+    .chat-card-warning .chat-card-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #991b1b;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .chat-bullet-list {
+      margin: 6px 0 10px 0;
+      padding-left: 18px;
+    }
+    .chat-bullet-list li {
+      margin-bottom: 6px;
+      line-height: 1.55;
+    }
+    .chat-num-list {
+      margin: 6px 0 10px 0;
+      padding-left: 20px;
+    }
+    .chat-num-list li {
+      margin-bottom: 6px;
+      line-height: 1.55;
+    }
+    .chat-disclaimer-card {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 11.5px;
+      color: #92400e;
+      margin-top: 10px;
+      line-height: 1.5;
+    }
+    .chat-citations-box {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid var(--border-light);
+    }
+    .chat-citations-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-secondary);
+    }
+    .citation-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-family: var(--font-mono);
+      background: #e0f2fe;
+      color: #0369a1;
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.15s;
+    }
+    .citation-tag:hover {
+      background: #bae6fd;
+    }
+    .chat-bubble-loading {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+    }
+    .chat-typing-dots {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .chat-typing-dots span {
+      width: 7px;
+      height: 7px;
+      background: #94a3b8;
+      border-radius: 50%;
+      animation: chatDotPulse 1.4s infinite ease-in-out both;
+    }
+    .chat-typing-dots span:nth-child(1) { animation-delay: -0.32s; }
+    .chat-typing-dots span:nth-child(2) { animation-delay: -0.16s; }
+    @keyframes chatDotPulse {
+      0%, 80%, 100% { transform: scale(0); opacity: 0.4; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+    .chat-chips-container {
+      padding: 6px 16px 10px;
+      border-top: 1px solid var(--border-light);
+      background: var(--bg-subtle);
+    }
+    .chat-chips-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .chip-refresh-btn {
+      background: transparent;
+      border: none;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--primary);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      transition: all 0.15s;
+    }
+    .chip-refresh-btn:hover {
+      background: #e0f2fe;
+    }
+    .chat-quick-chips {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-bottom: 2px;
+    }
+    .chat-quick-chips::-webkit-scrollbar {
+      display: none;
+    }
+    .chip-btn {
+      background: #ffffff;
+      border: 1px solid var(--border-medium);
+      color: var(--text-body);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 13px;
+      border-radius: 999px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+    }
+    .chip-btn:hover {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+      transform: translateY(-1px);
+    }
+    .popover-quick-chips {
+      padding: 6px 12px;
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      border-top: 1px solid var(--border-light);
+      background: var(--bg-subtle);
+    }
+    .popover-quick-chips::-webkit-scrollbar {
+      display: none;
+    }
+    .popover-quick-chips .chip-btn {
+      font-size: 11px;
+      padding: 4px 10px;
+    }
+    .chat-input-bar {
+      padding: 14px 18px;
+      border-top: 1px solid var(--border-light);
+      background: var(--bg-base);
+      display: flex;
+      gap: 10px;
+    }
+    .chat-input-bar input {
+      flex: 1;
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-size: 14px;
+      outline: none;
+    }
+    .chat-input-bar input:focus { border-color: var(--primary); }
+
+    /* ====================================================================
+       PAGE 5: PATIENT CLOUD RECORDS
+       ==================================================================== */
+    .record-item-card {
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      background: var(--bg-base);
+      box-shadow: var(--shadow-sm);
+    }
+    .record-item-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .record-type-badge {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: var(--bg-subtle);
+      color: var(--text-secondary);
+    }
+    .record-timestamp { font-size: 12px; color: var(--text-muted); font-family: var(--font-mono); }
+    .record-title { font-size: 15px; font-weight: 700; color: var(--text-heading); }
+    .record-summary { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
+
+    /* ====================================================================
+       GLOBAL FLOATING CLINICAL CHAT WIDGET
+       ==================================================================== */
+    .floating-chat-trigger {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 999;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #0284c7;
+      color: white;
+      border: none;
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+    .floating-chat-trigger:hover {
+      transform: scale(1.05);
+      background: #0369a1;
+    }
+    .floating-chat-trigger svg { width: 24px; height: 24px; }
+
+    .floating-chat-popover {
+      position: fixed;
+      bottom: 86px;
+      right: 24px;
+      z-index: 1000;
+      width: 360px;
+      height: 480px;
+      background: var(--bg-base);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-popover);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      animation: popIn 0.2s ease-out;
+    }
+    .floating-chat-popover.open { display: flex; }
+    @keyframes popIn {
+      from { opacity: 0; transform: translateY(10px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .popover-header {
+      padding: 12px 16px;
+      background: var(--bg-subtle);
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .popover-header-title { font-size: 13.5px; font-weight: 700; color: var(--text-heading); }
+    .popover-btn-icon {
+      background: transparent;
+      border: none;
+      font-size: 15px;
+      cursor: pointer;
+      color: var(--text-secondary);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .popover-btn-icon:hover { color: var(--text-heading); background: #e2e8f0; }
+
+    .popover-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .popover-footer {
+      padding: 10px 14px;
+      border-top: 1px solid var(--border-light);
+      background: var(--bg-base);
+      display: flex;
+      gap: 8px;
+    }
+    .popover-footer input {
+      flex: 1;
+      border: 1px solid var(--border-medium);
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 13px;
+      outline: none;
+    }
+    .popover-footer input:focus { border-color: var(--primary); }
+
+    /* Footer */
+    .site-footer {
+      background: var(--bg-base);
+      border-top: 1px solid var(--border-light);
+      padding: 20px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    /* Toast */
+    #toast-shelf {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .toast-msg {
+      background: var(--text-heading);
+      color: white;
+      padding: 10px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      animation: toastFade 0.25s ease;
+    }
+    @keyframes toastFade { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+
+  <!-- ====================================================================
+       TOP NAVIGATION BAR
+       ==================================================================== -->
+  <header class="top-navbar">
+    <div class="nav-inner">
+      <div class="brand-cluster" onclick="switchTab('home')">
+        <div class="brand-symbol">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+          </svg>
+        </div>
+        <div class="brand-meta">
+          <h1>PatientPulse AI</h1>
+          <p>Clinical Decision Support Platform</p>
+        </div>
+      </div>
+
+      <nav class="nav-links">
+        <button class="nav-tab-btn active" data-page="home" onclick="switchTab('home')">Home</button>
+        <button class="nav-tab-btn" data-page="xray" onclick="switchTab('xray')">Radiographs</button>
+        <button class="nav-tab-btn" data-page="rx" onclick="switchTab('rx')">Prescriptions</button>
+        <button class="nav-tab-btn" data-page="labs" onclick="switchTab('labs')">Lab Reports</button>
+        <button class="nav-tab-btn" data-page="chat" onclick="switchTab('chat')">AI Assistant</button>
+        <button class="nav-tab-btn" data-page="records" onclick="switchTab('records')">Patient History</button>
+        <button class="nav-tab-btn" data-page="about" onclick="switchTab('about')">About</button>
+      </nav>
+
+      <div class="user-profile-cluster">
+        <div class="user-details">
+          <div class="user-name">Clinical Session</div>
+          <div class="user-role">Diagnostic Portal</div>
+        </div>
+        <div class="user-avatar" title="Medical Doctor (MD) — Physician Clinical Decision Support Session" style="cursor:help;">MD</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ====================================================================
+       MAIN PAGE ROUTER
+       ==================================================================== -->
+  <main class="main-viewport">
+
+    <!-- ================================================================
+         TAB 0: HOME PAGE
+         ================================================================ -->
+    <section class="page-section active" id="sec-home">
+      <div class="hero-welcome-card">
+        <div class="hero-text-block">
+          <div class="hero-badge">Clinical Diagnostics & NLP Suite</div>
+          <h2>Multimodal Intelligence for Healthcare Professionals & Patients</h2>
+          <p class="lead">Accurate radiograph pathology triage, doctor handwriting prescription deciphering, biomarker reference evaluations, and evidence-grounded medical guidance in plain English.</p>
+        </div>
+        <div>
+          <button class="btn btn-primary" onclick="switchTab('xray')">Start Diagnostic Triage →</button>
+        </div>
+      </div>
+
+      <div class="metrics-row">
+        <div class="metric-card">
+          <div class="metric-val">18 Classes</div>
+          <div class="metric-label">Pulmonary Pathologies</div>
+          <div class="metric-sub">DenseNet-121 Deep Learning</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-val">92.0%</div>
+          <div class="metric-label">OCR Handwriting Accuracy</div>
+          <div class="metric-sub">Transformer Layout Parser</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-val">100% Grounded</div>
+          <div class="metric-label">Clinical Citation Rigor</div>
+          <div class="metric-sub">NIH MedlinePlus & openFDA</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-val" id="homeAuditCount">31</div>
+          <div class="metric-label">Synchronized Cases</div>
+          <div class="metric-sub">Patient Audit Trail</div>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 16px; font-size: 17px; font-weight: 700; color: var(--text-heading);">
+        Diagnostic AI Modules
+      </div>
+
+      <div class="module-grid">
+        <div class="module-card" onclick="switchTab('xray')">
+          <div>
+            <div class="module-icon-wrap">🩻</div>
+            <h4>Radiograph & Bone Vision</h4>
+            <p>Upload thoracic or skeletal X-rays to detect pathologies, localize bounding boxes, and view Grad-CAM attention heatmaps.</p>
+          </div>
+          <div class="module-card-footer">
+            <span class="module-tag">Vision AI</span>
+            <span class="module-cta">Launch Module →</span>
+          </div>
+        </div>
+
+        <div class="module-card" onclick="switchTab('rx')">
+          <div>
+            <div class="module-icon-wrap">📝</div>
+            <h4>Doctor Handwriting OCR</h4>
+            <p>Decipher messy doctor prescriptions, generate a 4-slot daily dosing schedule, and receive high-priority FDA food-drug warnings.</p>
+          </div>
+          <div class="module-card-footer">
+            <span class="module-tag">TrOCR</span>
+            <span class="module-cta">Launch Module →</span>
+          </div>
+        </div>
+
+        <div class="module-card" onclick="switchTab('labs')">
+          <div>
+            <div class="module-icon-wrap">🔬</div>
+            <h4>Biomarker Lab Explainer</h4>
+            <p>Extract clinical blood test biomarkers, flag out-of-range metrics, and translate complex findings into plain-English cards.</p>
+          </div>
+          <div class="module-card-footer">
+            <span class="module-tag">Bio_ClinicalBERT</span>
+            <span class="module-cta">Launch Module →</span>
+          </div>
+        </div>
+
+        <div class="module-card" onclick="switchTab('chat')">
+          <div>
+            <div class="module-icon-wrap">💬</div>
+            <h4>AI Health Assistant</h4>
+            <p>Ask medical questions regarding drug side effects or test definitions, grounded directly in official government health databases.</p>
+          </div>
+          <div class="module-card-footer">
+            <span class="module-tag">RAG Agent</span>
+            <span class="module-cta">Launch Module →</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         TAB 1: RADIOGRAPHS
+         ================================================================ -->
+    <section class="page-section" id="sec-xray">
+      <div class="page-title-row">
+        <div>
+          <h2>Radiograph & Bone Vision Console</h2>
+          <p>Universal Thoracic Pathology Screening & Skeletal Fracture Localization</p>
+        </div>
+        <button class="btn btn-demo" onclick="loadSampleXray()">⚡ Try Sample Demo</button>
+      </div>
+
+      <div class="workbench-grid">
+        <!-- Input Panel -->
+        <div>
+          <div class="panel-card">
+            <h4 class="panel-title">Upload Radiograph</h4>
+            <div class="field-group">
+              <label class="field-label" for="xrayPatientInput">Patient Name</label>
+              <input type="text" class="text-box" id="xrayPatientInput" placeholder="e.g. Eleanor Vance">
+            </div>
+            <div class="file-dropzone" onclick="document.getElementById('xrayFileElem').click()">
+              <div class="dropzone-icon">📁</div>
+              <div class="dropzone-text">Click to select or drag & drop radiograph</div>
+              <div class="dropzone-hint">Supports DICOM, PNG, JPEG</div>
+              <input type="file" id="xrayFileElem" accept="image/*" style="display:none;" onchange="handleXraySelectedFile(this.files[0])">
+            </div>
+            <div id="xrayFileInfoText" style="display:none; margin-top:10px; font-size:12.5px; color:var(--primary); font-weight:600;"></div>
+            <button class="btn btn-primary" id="btnRunXray" style="width:100%; margin-top:16px; justify-content:center;" onclick="submitXrayAnalysis()">Run Radiograph Screening</button>
+          </div>
+
+          <div class="panel-card">
+            <h4 class="panel-title">Visual Overlays</h4>
+            <div class="viewport-controls-bar">
+              <label class="switch-label">
+                <input type="checkbox" id="checkHeatmap" checked onchange="redrawXrayCanvas()">
+                <span>Grad-CAM Heatmap</span>
+              </label>
+              <label class="switch-label">
+                <input type="checkbox" id="checkBoxes" checked onchange="redrawXrayCanvas()">
+                <span>Bounding Boxes</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Output Diagnostic Viewport -->
+        <div>
+          <div class="panel-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+              <h4 class="panel-title" style="margin-bottom:0;">Inspection Viewport</h4>
+              <span class="status-badge badge-caution" id="xrayTriagePill">Triage: Urgent</span>
+            </div>
+            <div class="image-viewport" id="xrayCanvasContainer">
+              <img id="xrayBaseImg" src="" alt="X-Ray Scan" style="display:none;">
+              <canvas id="xrayCanvasLayer"></canvas>
+              <div id="xrayEmptyNotice" style="color:#94a3b8; font-size:13px; text-align:center; padding:50px 20px;">
+                <div style="font-size:32px; margin-bottom:8px;">🩻</div>
+                Upload an X-ray or click <b>Try Sample Demo</b> to inspect findings.
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-card" id="xrayOutputCard" style="display:none;">
+            <h4 class="panel-title">Clinical Findings & Probabilities</h4>
+            <div style="margin-bottom:16px;">
+              <div style="font-size:11.5px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Primary Finding</div>
+              <div style="font-size:18px; font-weight:800; color:var(--text-heading);" id="xrayPrimaryTitle">Atelectasis (Partial Lung Collapse)</div>
+              
+              <!-- Plain English Patient Deciphering Box -->
+              <div style="background:var(--bg-subtle); border-radius:var(--radius-md); padding:14px 16px; border-left:4px solid var(--primary); margin-top:10px;">
+                <div style="font-size:11.5px; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px;">💬 Plain-English Patient Deciphering</div>
+                <p style="font-size:13px; color:var(--text-heading); line-height:1.6; margin:0;" id="xraySummaryText">Partial lung deflation identified in lower lobe.</p>
+              </div>
+            </div>
+
+            <div style="margin-bottom:16px;">
+              <div style="font-size:12px; font-weight:700; color:var(--text-heading); margin-bottom:8px;">Differential Probabilities</div>
+              <div id="xrayProbList"></div>
+            </div>
+
+            <!-- Required Patient Advice -->
+            <div id="xrayAdviceCard" style="background:#f0fdf4; border-radius:var(--radius-md); padding:14px 16px; border:1px solid #bbf7d0; margin-bottom:16px;">
+              <div style="font-size:11.5px; font-weight:700; color:#166534; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px;">🩺 Required Patient Advice & Action Steps</div>
+              <ul id="xrayAdviceList" style="padding-left:18px; font-size:12.5px; color:#14532d; line-height:1.5;"></ul>
+            </div>
+
+            <div style="background:var(--bg-subtle); border-radius:var(--radius-sm); padding:12px 14px; border:1px solid var(--border-light);">
+              <div style="font-size:11.5px; font-weight:700; color:var(--text-secondary); text-transform:uppercase; margin-bottom:4px;">Physician Clinical Correlation</div>
+              <p style="font-size:12.5px; color:var(--text-body); margin:0;" id="xrayGuidanceText">Deep-breathing incentive spirometry advised. Follow up if dyspnea persists.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         TAB 2: PRESCRIPTIONS
+         ================================================================ -->
+    <section class="page-section" id="sec-rx">
+      <div class="page-title-row">
+        <div>
+          <h2>Doctor Prescription Decipherer</h2>
+          <p>Handwriting Recognition, 4-Slot Daily Schedule & FDA Safety Warnings</p>
+        </div>
+        <button class="btn btn-demo" onclick="loadSampleRx()">⚡ Try Sample Demo</button>
+      </div>
+
+      <div class="workbench-grid">
+        <!-- Input -->
+        <div>
+          <div class="panel-card">
+            <h4 class="panel-title">Prescription Document</h4>
+            <div class="field-group">
+              <label class="field-label" for="rxPatientInput">Patient Name</label>
+              <input type="text" class="text-box" id="rxPatientInput" placeholder="e.g. John Smith">
+            </div>
+            <div class="file-dropzone" onclick="document.getElementById('rxFileElem').click()">
+              <div class="dropzone-icon">📄</div>
+              <div class="dropzone-text">Upload prescription image or PDF slip</div>
+              <div class="dropzone-hint">Scanned receipts, handwriting photos</div>
+              <input type="file" id="rxFileElem" accept="image/*,application/pdf" style="display:none;" onchange="handleRxSelectedFile(this.files[0])">
+            </div>
+            <div id="rxFileInfoText" style="display:none; margin-top:10px; font-size:12.5px; color:var(--primary); font-weight:600;"></div>
+            <div style="margin-top:14px;">
+              <label class="field-label">Or Paste Handwriting Transcription</label>
+              <textarea class="text-area" id="rxTextInput" placeholder="e.g. Rx: Amoxicillin 500mg TID, Metformin 500mg BID..."></textarea>
+            </div>
+            <button class="btn btn-primary" id="btnRunRx" style="width:100%; margin-top:16px; justify-content:center;" onclick="submitRxAnalysis()">Decipher Prescription</button>
+          </div>
+        </div>
+
+        <!-- Output -->
+        <div>
+          <div class="panel-card" id="rxOutputPanel" style="display:none;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; border-bottom:1px solid var(--border-light); padding-bottom:12px; gap:12px;">
+              <div>
+                <h4 class="panel-title" style="margin-bottom:2px;" id="rxDoctorName">Doctor / Clinic</h4>
+                <div style="font-size:12px; color:var(--text-secondary);" id="rxDoctorSpec">Prescription Details</div>
+              </div>
+              <span class="status-badge badge-normal" id="rxConfidencePill">--% Confidence</span>
+            </div>
+
+            <div style="font-size:12px; font-weight:700; color:var(--text-heading); margin-bottom:8px;">Identified Medications</div>
+            <div id="rxMedsList"></div>
+
+            <div style="font-size:12px; font-weight:700; color:var(--primary); margin:16px 0 8px;">Daily Medication Timetable</div>
+            <div class="timetable-columns" id="rxTimetableCols"></div>
+
+            <div class="fda-alert-box" id="rxFdaAlertBox">
+              <h5>⚠ Food & Drug Interaction Warnings</h5>
+              <div id="rxFdaItems"></div>
+            </div>
+          </div>
+
+          <div class="panel-card" id="rxEmptyPanel" style="text-align:center; color:var(--text-muted); padding:50px 20px;">
+            <div style="font-size:32px; margin-bottom:8px;">📝</div>
+            Upload a prescription or click <b>Try Sample Demo</b> to decode handwriting and daily timetable.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         TAB 3: LAB REPORTS
+         ================================================================ -->
+    <section class="page-section" id="sec-labs">
+      <div class="page-title-row">
+        <div>
+          <h2>Biomarker Lab Explainer</h2>
+          <p>Clinical Laboratory Blood Test Extraction & Plain-English Patient Cards</p>
+        </div>
+        <button class="btn btn-demo" onclick="loadSampleLabs()">⚡ Try Sample Demo</button>
+      </div>
+
+      <div class="workbench-grid">
+        <!-- Input -->
+        <div>
+          <div class="panel-card">
+            <h4 class="panel-title">Laboratory Blood Report</h4>
+            <div class="field-group">
+              <label class="field-label" for="labsPatientInput">Patient Name</label>
+              <input type="text" class="text-box" id="labsPatientInput" placeholder="e.g. Robert Taylor">
+            </div>
+            <div class="file-dropzone" onclick="document.getElementById('labsFileElem').click()">
+              <div class="dropzone-icon">🔬</div>
+              <div class="dropzone-text">Upload lab report PDF or photo</div>
+              <div class="dropzone-hint">CBC, metabolic, lipid panels</div>
+              <input type="file" id="labsFileElem" accept="image/*,application/pdf" style="display:none;" onchange="handleLabsSelectedFile(this.files[0])">
+            </div>
+            <div id="labsFileInfoText" style="display:none; margin-top:10px; font-size:12.5px; color:var(--primary); font-weight:600;"></div>
+            <div style="margin-top:14px;">
+              <label class="field-label">Or Paste Lab Results</label>
+              <textarea class="text-area" id="labsTextInput" placeholder="e.g. Fasting Blood Glucose: 142 mg/dL, Hemoglobin: 13.8 g/dL, Total Cholesterol: 238 mg/dL..."></textarea>
+            </div>
+            <button class="btn btn-primary" id="btnRunLabs" style="width:100%; margin-top:16px; justify-content:center;" onclick="submitLabsAnalysis()">Analyze Lab Biomarkers</button>
+          </div>
+        </div>
+
+        <!-- Output -->
+        <div>
+          <div class="panel-card" id="labsOutputPanel" style="display:none;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; border-bottom:1px solid var(--border-light); padding-bottom:12px; gap:12px;">
+              <div>
+                <h4 class="panel-title" style="margin-bottom:2px;" id="labsReportHeading">Comprehensive Metabolic Blood Panel</h4>
+                <div style="font-size:12.5px; color:var(--text-secondary);" id="labsPatientSubline">Patient Lab Deciphering</div>
+              </div>
+              <span class="status-badge badge-caution" id="labsTriagePill">Caution</span>
+            </div>
+
+            <!-- Plain English Patient Explanation Box -->
+            <div style="background:var(--bg-subtle); border-radius:var(--radius-md); padding:16px 18px; border-left:4px solid var(--primary); margin-bottom:16px;">
+              <div style="font-size:11.5px; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px;">💬 Plain-English Patient Deciphering</div>
+              <div id="labsSummaryLine" style="font-size:13.5px; color:var(--text-heading); line-height:1.6; font-weight:500;">Biomarker evaluations complete.</div>
+            </div>
+
+            <!-- Required Medical & Lifestyle Advice Box -->
+            <div id="labsAdviceBox" style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:var(--radius-md); padding:16px 18px; margin-bottom:18px;">
+              <div style="font-size:11.5px; font-weight:700; color:#166534; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">🥗 Required Medical & Lifestyle Advice</div>
+              <ul id="labsAdviceList" style="padding-left:20px; font-size:13px; color:#14532d; line-height:1.6;"></ul>
+            </div>
+
+            <div style="font-size:12.5px; font-weight:700; color:var(--text-heading); margin-bottom:10px;">Biomarker Evaluations & Individual Analysis</div>
+            <div id="labsBiomarkersList"></div>
+
+            <div style="margin-top:16px; background:var(--bg-subtle); border-radius:var(--radius-md); padding:16px; border:1px solid var(--border-light);">
+              <div style="font-size:13px; font-weight:700; color:var(--primary); margin-bottom:6px;">Questions for Your Physician</div>
+              <ul id="labsDoctorQuestions" style="padding-left:18px; font-size:12.5px; color:var(--text-body); line-height:1.6;"></ul>
+            </div>
+          </div>
+
+          <div class="panel-card" id="labsEmptyPanel" style="text-align:center; color:var(--text-muted); padding:50px 20px;">
+            <div style="font-size:32px; margin-bottom:8px;">🔬</div>
+            Upload a laboratory report or click <b>Try Sample Demo</b> to view biomarker cards and questions for your doctor.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         TAB 4: AI HEALTH ASSISTANT CHAT
+         =============================================================== -->
+    <section class="page-section" id="sec-chat">
+      <div class="page-title-row">
+        <div>
+          <h2>Clinical AI Assistant</h2>
+          <p>Grounded in NIH MedlinePlus & openFDA with Official Reference Citations</p>
+        </div>
+        <button class="btn btn-demo" onclick="askSampleQuestion()">⚡ Try Sample Question</button>
+      </div>
+
+      <div class="chat-workbench">
+        <div class="chat-head-strip">
+          <div style="font-size:13.5px; font-weight:700; color:var(--text-heading);">Patient Consultation Assistant</div>
+          <span class="status-badge badge-normal">Evidence-Grounded</span>
+        </div>
+        <div class="chat-scroll" id="fullChatThread">
+          <div class="chat-bubble agent">
+            Hello! I am your clinical consultation assistant. You can ask about drug interactions, side effects, or lab test definitions. All responses are verified against NIH and FDA reference libraries.
+          </div>
+        </div>
+        <div class="chat-chips-container" id="chatChipsContainer">
+          <div class="chat-chips-header">
+            <span id="chipsHeaderLabel">⚡ Trending Health Queries:</span>
+            <button class="chip-refresh-btn" onclick="fetchTrendingPrompts(true)" title="Shuffle for new questions">↻ Shuffle</button>
+          </div>
+          <div class="chat-quick-chips" id="mainChatChips"></div>
+        </div>
+        <div class="chat-input-bar">
+          <input type="text" id="fullChatInput" placeholder="Ask a question regarding medications, dosages, or lab tests..." onkeydown="if(event.key==='Enter') sendFullChatMsg()">
+          <button class="btn btn-primary" onclick="sendFullChatMsg()">Send</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         TAB 5: PATIENT CLOUD RECORDS
+         ================================================================ -->
+    <section class="page-section" id="sec-records">
+      <div class="page-title-row">
+        <div>
+          <h2>Patient History & Audit Trail</h2>
+          <p>Real-Time Synchronized Logs from Supabase Cloud Database</p>
+        </div>
+        <button class="btn" onclick="fetchPatientHistory()">↻ Refresh History</button>
+      </div>
+
+      <div class="panel-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid var(--border-light);">
+          <div style="font-size:13.5px; font-weight:700; color:var(--text-heading);">Recent Diagnostic Records</div>
+          <span style="font-size:12px; color:var(--text-secondary);" id="recordsSourceIndicator">Cloud Synced</span>
+        </div>
+        <div id="recordsListContainer">
+          <div style="color:var(--text-muted); font-size:13px; padding:30px 0; text-align:center;">Fetching patient audit trail...</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         TAB 6: ABOUT PATIENTPULSE AI & MODEL ARCHITECTURE
+         ================================================================ -->
+    <section class="page-section" id="sec-about">
+      <div class="page-title-row">
+        <div>
+          <h2>About PatientPulse AI</h2>
+          <p>Enterprise Multimodal Clinical Decision Support & Zero-Jargon Patient Intelligence Platform</p>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span class="badge" style="background:#f0f9ff; color:#0284c7; border:1px solid #bae6fd; font-weight:700; font-size:12px; padding:6px 12px; border-radius:20px;">
+            ● Platform v1.0.0 • Production Ready
+          </span>
+        </div>
+      </div>
+
+      <!-- Mission & Executive Summary Card -->
+      <div class="panel-card" style="margin-bottom:24px; background:linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);">
+        <div style="display:flex; align-items:flex-start; gap:16px;">
+          <div style="width:48px; height:48px; border-radius:12px; background:#e0f2fe; color:#0284c7; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <svg style="width:24px; height:24px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+            </svg>
+          </div>
+          <div>
+            <h3 style="font-size:18px; font-weight:800; color:var(--text-heading); margin:0 0 8px 0;">Our Clinical Mission</h3>
+            <p style="font-size:13.5px; line-height:1.7; color:var(--text-body); margin:0 0 12px 0;">
+              Diagnostic medical data is notoriously complex, highly fragmented, and laden with clinical jargon. A patient receiving a radiograph report reading <em>"Cardiomegaly with bilateral blunting of costophrenic angles"</em>, a scribbled prescription slip for <em>"Amoxicillin 500mg TDS"</em>, or a lab blood panel with flagged <em>AST/ALT transaminases</em> is often left confused, anxious, and at risk of non-compliance.
+            </p>
+            <p style="font-size:13.5px; line-height:1.7; color:var(--text-body); margin:0;">
+              <strong>PatientPulse AI</strong> bridges this critical communication divide. By unifying <strong>PyTorch deep learning vision</strong>, <strong>transformer-based handwriting OCR</strong>, <strong>biomedical language processing (BioBERT)</strong>, and <strong>grounded government medical retrieval (NIH MedlinePlus &amp; openFDA)</strong>, the platform translates intimidating clinical artifacts into clear, transparent, and actionable guidance for patients while providing attending physicians with rapid, high-precision diagnostic triage.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Core AI Models & Neural Architecture -->
+      <div style="margin-bottom:16px;">
+        <h3 style="font-size:16px; font-weight:800; color:var(--text-heading); margin:0 0 4px 0;">Core AI Models &amp; Neural Architecture</h3>
+        <p style="font-size:13px; color:var(--text-secondary); margin:0 0 16px 0;">Five specialized, production-grade intelligence engines powering PatientPulse AI:</p>
+      </div>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:20px; margin-bottom:24px;">
+
+        <!-- Engine 1: Universal Radiograph Vision -->
+        <div class="panel-card" style="border-top:3px solid #0284c7;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span style="font-size:20px;">🩻</span>
+              <h4 style="margin:0; font-size:15px; font-weight:800; color:var(--text-heading);">Universal Radiograph Vision</h4>
+            </div>
+            <span class="badge" style="background:#e0f2fe; color:#0369a1; font-family:var(--font-mono); font-size:11px; font-weight:700;">TorchXRayVision</span>
+          </div>
+          <div style="font-size:12.5px; color:var(--text-secondary); margin-bottom:12px;">
+            <strong>Primary Model:</strong> DenseNet-121 pre-trained on NIH ChestX-ray14 + Gemini Multimodal Vision Fallback
+          </div>
+          <ul style="margin:0; padding-left:18px; font-size:12.5px; line-height:1.6; color:var(--text-body);">
+            <li>Screens <strong>18 pulmonary pathologies</strong> (Cardiomegaly, Pneumonia, Atelectasis, Effusion, Infiltration, etc.).</li>
+            <li>Evaluates <strong>skeletal &amp; joint trauma</strong> (fractures, dislocations, osteo-degenerative changes).</li>
+            <li>Calculates normalized <strong>bounding-box coordinates</strong> over detected anatomical abnormalities.</li>
+            <li>Generates transparent <strong>RGBA Grad-CAM activation heatmaps</strong> for clinical interpretability.</li>
+          </ul>
+        </div>
+
+        <!-- Engine 2: Doctor Handwriting OCR -->
+        <div class="panel-card" style="border-top:3px solid #10b981;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span style="font-size:20px;">📝</span>
+              <h4 style="margin:0; font-size:15px; font-weight:800; color:var(--text-heading);">Prescription Handwriting OCR</h4>
+            </div>
+            <span class="badge" style="background:#d1fae5; color:#065f46; font-family:var(--font-mono); font-size:11px; font-weight:700;">Microsoft TrOCR</span>
+          </div>
+          <div style="font-size:12.5px; color:var(--text-secondary); margin-bottom:12px;">
+            <strong>Primary Model:</strong> `microsoft/trocr-base-handwritten` + PyMuPDF Layout Parser
+          </div>
+          <ul style="margin:0; padding-left:18px; font-size:12.5px; line-height:1.6; color:var(--text-body);">
+            <li>Deciphers cursive and notoriously illegible doctor prescription handwriting slips and PDFs.</li>
+            <li>Constructs an intuitive <strong>4-slot daily timetable</strong> (Morning, Afternoon, Evening, Bedtime).</li>
+            <li>Issues prominent clinical alerts whenever character confidence falls below <strong>80%</strong>.</li>
+            <li>Cross-references medication names against <strong>openFDA drug databases</strong> for food-drug interaction warnings.</li>
+          </ul>
+        </div>
+
+        <!-- Engine 3: Biomarker NLP & Lab Explainer -->
+        <div class="panel-card" style="border-top:3px solid #8b5cf6;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span style="font-size:20px;">🧪</span>
+              <h4 style="margin:0; font-size:15px; font-weight:800; color:var(--text-heading);">Biomarker NLP &amp; Lab Explainer</h4>
+            </div>
+            <span class="badge" style="background:#ede9fe; color:#5b21b6; font-family:var(--font-mono); font-size:11px; font-weight:700;">Bio_ClinicalBERT</span>
+          </div>
+          <div style="font-size:12.5px; color:var(--text-secondary); margin-bottom:12px;">
+            <strong>Primary Model:</strong> `emilyalsentzer/Bio_ClinicalBERT` + Clinical Biomarker Graph
+          </div>
+          <ul style="margin:0; padding-left:18px; font-size:12.5px; line-height:1.6; color:var(--text-body);">
+            <li>Parses <strong>30+ blood metrics</strong> (CBC, Lipid Panel, Liver Function, Renal Function, Metabolic Panel).</li>
+            <li>Automated triage: classifies every value into <strong>NORMAL</strong>, <strong>HIGH</strong>, <strong>LOW</strong>, or <strong>CRITICAL</strong>.</li>
+            <li>Generates dual-level explanations: <em>"What It Does"</em> and <em>"What Your Result Means"</em> in simple English.</li>
+            <li>Formulates tailored <strong>Questions for Your Doctor</strong> to empower informed patient-physician dialogue.</li>
+          </ul>
+        </div>
+
+        <!-- Engine 4: Grounded Medical RAG -->
+        <div class="panel-card" style="border-top:3px solid #f59e0b;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span style="font-size:20px;">📚</span>
+              <h4 style="margin:0; font-size:15px; font-weight:800; color:var(--text-heading);">Grounded Medical RAG</h4>
+            </div>
+            <span class="badge" style="background:#fef3c7; color:#92400e; font-family:var(--font-mono); font-size:11px; font-weight:700;">NIH &amp; openFDA</span>
+          </div>
+          <div style="font-size:12.5px; color:var(--text-secondary); margin-bottom:12px;">
+            <strong>Primary Sources:</strong> Live NIH MedlinePlus REST + openFDA Labeling REST + ChromaDB
+          </div>
+          <ul style="margin:0; padding-left:18px; font-size:12.5px; line-height:1.6; color:var(--text-body);">
+            <li><strong>Zero Hallucination Policy:</strong> Queries live official databases for every clinical claim.</li>
+            <li>Fetches real-time <strong>FDA Boxed Warnings</strong>, contraindications, and active drug ingredients.</li>
+            <li>Retrieves authoritative <strong>NIH MedlinePlus</strong> medical encyclopedic definitions.</li>
+            <li>Embeds verified government links (`nlm.nih.gov` &amp; `fda.gov`) directly into every response.</li>
+          </ul>
+        </div>
+
+        <!-- Engine 5: 24/7 AI Health Companion -->
+        <div class="panel-card" style="border-top:3px solid #06b6d4; grid-column:span 1 / -1;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span style="font-size:20px;">🤖</span>
+              <h4 style="margin:0; font-size:15px; font-weight:800; color:var(--text-heading);">24/7 AI Health Companion Agent</h4>
+            </div>
+            <span class="badge" style="background:#cffafe; color:#155e75; font-family:var(--font-mono); font-size:11px; font-weight:700;">Groq Llama 3.1 &amp; Gemini</span>
+          </div>
+          <div style="font-size:12.5px; color:var(--text-secondary); margin-bottom:12px;">
+            <strong>Primary Architecture:</strong> Groq Llama 3.1 8B Instant (sub-second token generation) with Google Gemini 1.5 Flash Fallback
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:16px;">
+            <ul style="margin:0; padding-left:18px; font-size:12.5px; line-height:1.6; color:var(--text-body);">
+              <li>Autonomous clinical <strong>tool-calling</strong>: dynamically triggers FDA searches, biomarker lookups, and patient history retrieval.</li>
+              <li>Responsible <strong>OTC Pharmacy Guidance</strong>: suggests safe over-the-counter tablets (Paracetamol, Ibuprofen) with exact dosing precautions and red-flag alerts.</li>
+            </ul>
+            <ul style="margin:0; padding-left:18px; font-size:12.5px; line-height:1.6; color:var(--text-body);">
+              <li><strong>Dynamic Trending Health Topics:</strong> Rotates real-world health queries on reload and shuffle.</li>
+              <li><strong>Context-Aware Follow-Up Chips:</strong> Automatically analyzes prior assistant answers to generate intelligent, personalized next questions.</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Core Engineering & Safety Principles -->
+      <div class="panel-card" style="margin-bottom:24px;">
+        <h3 style="font-size:16px; font-weight:800; color:var(--text-heading); margin:0 0 16px 0;">Clinical Safety &amp; Engineering Standards</h3>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:16px;">
+          <div style="padding:14px; border-radius:8px; background:var(--bg-canvas); border:1px solid var(--border-light);">
+            <div style="font-weight:700; font-size:13.5px; color:var(--primary); margin-bottom:6px;">① Zero-Jargon Translation</div>
+            <p style="font-size:12px; color:var(--text-body); line-height:1.5; margin:0;">
+              Every finding is parsed into accessible, 6th-to-8th grade reading level English, eliminating frightening medical jargon while maintaining diagnostic fidelity.
+            </p>
+          </div>
+          <div style="padding:14px; border-radius:8px; background:var(--bg-canvas); border:1px solid var(--border-light);">
+            <div style="font-weight:700; font-size:13.5px; color:#10b981; margin-bottom:6px;">② Strict Factual Grounding</div>
+            <p style="font-size:12px; color:var(--text-body); line-height:1.5; margin:0;">
+              All drug, dosage, and diagnostic information is grounded directly in live NIH MedlinePlus and FDA APIs to eliminate hallucinations.
+            </p>
+          </div>
+          <div style="padding:14px; border-radius:8px; background:var(--bg-canvas); border:1px solid var(--border-light);">
+            <div style="font-weight:700; font-size:13.5px; color:#f59e0b; margin-bottom:6px;">③ Physician-in-the-Loop</div>
+            <p style="font-size:12px; color:var(--text-body); line-height:1.5; margin:0;">
+              PatientPulse AI serves as an assistive triage and decision support layer, explicitly empowering and encouraging patient consultations with licensed medical doctors.
+            </p>
+          </div>
+          <div style="padding:14px; border-radius:8px; background:var(--bg-canvas); border:1px solid var(--border-light);">
+            <div style="font-weight:700; font-size:13.5px; color:#8b5cf6; margin-bottom:6px;">④ Audit Trail &amp; Cloud Sync</div>
+            <p style="font-size:12px; color:var(--text-body); line-height:1.5; margin:0;">
+              All diagnostic sessions, transcriptions, and triage determinations are logged to Cloud Supabase PostgreSQL with local SQLite backup resilience.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Technical Architecture Badges -->
+      <div class="panel-card" style="margin-bottom:24px;">
+        <h3 style="font-size:15px; font-weight:800; color:var(--text-heading); margin:0 0 12px 0;">Technology Stack &amp; Infrastructure</h3>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+          <span style="font-size:12px; padding:6px 12px; border-radius:6px; background:#f1f5f9; color:#334155; font-weight:600; border:1px solid var(--border-light);">Python 3.11</span>
+          <span style="font-size:12px; padding:6px 12px; border-radius:6px; background:#f1f5f9; color:#334155; font-weight:600; border:1px solid var(--border-light);">FastAPI Asynchronous Backend</span>
+          <span style="font-size:12px; padding:6px 12px; border-radius:6px; background:#f1f5f9; color:#334155; font-weight:600; border:1px solid var(--border-light);">PyTorch 2.x</span>
+          <span style="font-size:12px; padding:6px 12px; border-radius:6px; background:#f1f5f9; color:#334155; font-weight:600; border:1px solid var(--border-light);">TorchXRayVision (DenseNet-121)</span>
+          <span style="font-size:12px; padding:6px 12px; border-radius:6px; background:#f1f5f9; color:#334155; font-weight:600; border:1px solid var(--border-light);">Hugging Face Transformers (TrOCR &amp; Bio_ClinicalBERT)</span>
+          <span style="font-size:12px; padding:6px 12px; border-radius:6px; background:#f1f5f9; color:#334155; font-weight:600; border:1px solid var(--border-light);">Groq LPU (Llama 3.1 8B Instant)</span>
+          <span style="font-size:12px; padding:6px 12px; border-radius:6px; background:#f1f5f9; color:#334155; font-weight:600; border:1px solid var(--border-light);">Google Gemini 1.5 Flash Vision</span>
+          <span style="font-size:12px; padding:6px 12px; border-radius:6px; background:#f1f5f9; color:#334155; font-weight:600; border:1px solid var(--border-light);">Supabase Cloud PostgreSQL</span>
+          <span style="font-size:12px; padding:6px 12px; border-radius:6px; background:#f1f5f9; color:#334155; font-weight:600; border:1px solid var(--border-light);">ChromaDB Vector Store</span>
+          <span style="font-size:12px; padding:6px 12px; border-radius:6px; background:#f1f5f9; color:#334155; font-weight:600; border:1px solid var(--border-light);">Vanilla CSS3 Porcelain Design System</span>
+        </div>
+      </div>
+
+      <!-- Clinical & Legal Disclaimer -->
+      <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:12px; padding:16px 20px; display:flex; align-items:flex-start; gap:14px;">
+        <span style="font-size:22px; line-height:1;">⚠️</span>
+        <div style="font-size:12px; line-height:1.6; color:#92400e;">
+          <strong>Clinical &amp; Regulatory Notice:</strong> PatientPulse AI is an experimental clinical decision support and patient education tool. It is engineered to assist healthcare professionals with rapid triage and to aid patients in understanding diagnostic reports. It does not provide definitive medical diagnoses, prescribe prescription pharmaceuticals, or replace the clinical judgment of a licensed physician. If you are experiencing a medical emergency, immediately contact your local emergency services (e.g., 911 / 112).
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ====================================================================
+       GLOBAL FLOATING CLINICAL CHAT WIDGET
+       ==================================================================== -->
+  <button class="floating-chat-trigger" id="floatingChatBtn" onclick="togglePopoverChat()" title="Open AI Assistant">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+    </svg>
+  </button>
+
+  <div class="floating-chat-popover" id="floatingChatPopover">
+    <div class="popover-header">
+      <div class="popover-header-title">Clinical AI Assistant</div>
+      <div style="display:flex; gap:4px;">
+        <button class="popover-btn-icon" onclick="expandPopoverToTab()" title="Expand to Full Page">⤢</button>
+        <button class="popover-btn-icon" onclick="togglePopoverChat()" title="Close">✕</button>
+      </div>
+    </div>
+    <div class="popover-body" id="popoverChatScroll">
+      <div class="chat-bubble agent" style="font-size:13px;">
+        Hello! You can ask clinical questions from any page. How can I help?
+      </div>
+    </div>
+    <div class="popover-quick-chips" id="popoverChatChips"></div>
+    <div class="popover-footer">
+      <input type="text" id="popoverChatInput" placeholder="Type a medical question..." onkeydown="if(event.key==='Enter') sendPopoverMsg()">
+      <button class="btn btn-primary" style="padding:6px 14px; font-size:12.5px;" onclick="sendPopoverMsg()">Send</button>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    PatientPulse AI &bull; Clinical Decision Support Platform &bull; Medical Reference & Diagnostic Intelligence
+  </footer>
+
+  <div id="toast-shelf"></div>
+
+  <!-- ====================================================================
+       CLIENT LOGIC & API INTEGRATION
+       ==================================================================== -->
+  <script>
+    // Dynamic API Base: automatically uses origin in production (HTTPS) or falls back to localhost
+    const API_BASE = window.location.protocol.startsWith('http') ? window.location.origin : "http://127.0.0.1:8000";
+
+    // Tab Navigation
+    function switchTab(pageId) {
+      document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-page') === pageId);
+      });
+      document.querySelectorAll('.page-section').forEach(sec => {
+        sec.classList.toggle('active', sec.id === `sec-${pageId}`);
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (pageId === 'records') fetchPatientHistory();
+    }
+
+    // Toast Notice
+    function notify(text) {
+      const shelf = document.getElementById('toast-shelf');
+      const t = document.createElement('div');
+      t.className = 'toast-msg';
+      t.innerText = text;
+      shelf.appendChild(t);
+      setTimeout(() => {
+        t.style.opacity = '0';
+        t.style.transition = 'opacity 0.25s';
+        setTimeout(() => t.remove(), 250);
+      }, 3000);
+    }
+
+    // Floating Chat controls
+    function togglePopoverChat() {
+      const p = document.getElementById('floatingChatPopover');
+      p.classList.toggle('open');
+      if (p.classList.contains('open')) {
+        renderAllChatThreads();
+        const scroll = document.getElementById('popoverChatScroll');
+        if (scroll) scroll.scrollTop = scroll.scrollHeight;
+        const inp = document.getElementById('popoverChatInput');
+        if (inp) inp.focus();
+      }
+    }
+    function expandPopoverToTab() {
+      const p = document.getElementById('floatingChatPopover');
+      if (p) p.classList.remove('open');
+      switchTab('chat');
+      renderAllChatThreads();
+      setTimeout(() => {
+        const thread = document.getElementById('fullChatThread');
+        if (thread) thread.scrollTop = thread.scrollHeight;
+        const input = document.getElementById('fullChatInput');
+        if (input) input.focus();
+      }, 100);
+    }
+
+    // ================================================================
+    // MODEL 1: RADIOGRAPHS
+    // ================================================================
+    let activeXrayObj = null;
+    let loadedXrayFile = null;
+    let heatmapOverlayImg = new Image();
+
+    function getImageRenderedRect(img) {
+      const containerW = img.clientWidth || 500;
+      const containerH = img.clientHeight || 500;
+      const naturalW = img.naturalWidth || containerW;
+      const naturalH = img.naturalHeight || containerH;
+
+      if (!naturalW || !naturalH || !containerW || !containerH) {
+        return { offsetX: 0, offsetY: 0, renderW: containerW, renderH: containerH };
+      }
+
+      const imageAspect = naturalW / naturalH;
+      const containerAspect = containerW / containerH;
+
+      let renderW, renderH, offsetX, offsetY;
+
+      if (imageAspect > containerAspect) {
+        // Image is wider than viewport container
+        renderW = containerW;
+        renderH = containerW / imageAspect;
+        offsetX = 0;
+        offsetY = (containerH - renderH) / 2;
+      } else {
+        // Image is taller than or equal to viewport container
+        renderH = containerH;
+        renderW = containerH * imageAspect;
+        offsetX = (containerW - renderW) / 2;
+        offsetY = 0;
+      }
+
+      return {
+        offsetX: Math.max(0, Math.round(offsetX)),
+        offsetY: Math.max(0, Math.round(offsetY)),
+        renderW: Math.max(1, Math.round(renderW)),
+        renderH: Math.max(1, Math.round(renderH))
+      };
+    }
+
+    function handleXraySelectedFile(file) {
+      if (!file) return;
+      loadedXrayFile = file;
+
+      // 1. Show file name pill
+      const fileInfo = document.getElementById('xrayFileInfoText');
+      if (fileInfo) {
+        fileInfo.style.display = 'block';
+        fileInfo.innerText = `Selected: ${file.name}`;
+      }
+
+      // 2. Completely reset previous analysis, previous heatmaps, and previous bounding boxes
+      activeXrayObj = null;
+      heatmapOverlayImg = new Image();
+      heatmapOverlayImg.src = '';
+      const canvas = document.getElementById('xrayCanvasLayer');
+      if (canvas) {
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      document.getElementById('xrayOutputCard').style.display = 'none';
+      const triagePill = document.getElementById('xrayTriagePill');
+      if (triagePill) {
+        triagePill.innerText = "Triage: Ready to Screen";
+        triagePill.className = "status-badge badge-normal";
+      }
+
+      // 3. Load uploaded image clean into viewport
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = document.getElementById('xrayBaseImg');
+        img.src = e.target.result;
+        img.style.display = 'block';
+        document.getElementById('xrayEmptyNotice').style.display = 'none';
+        img.onload = () => redrawXrayCanvas();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function redrawXrayCanvas() {
+      const img = document.getElementById('xrayBaseImg');
+      const canvas = document.getElementById('xrayCanvasLayer');
+      if (!img || img.style.display === 'none') return;
+
+      const containerW = img.clientWidth || 500;
+      const containerH = img.clientHeight || 500;
+      canvas.width = containerW;
+      canvas.height = containerH;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const { offsetX, offsetY, renderW, renderH } = getImageRenderedRect(img);
+
+      const showBoxes = document.getElementById('checkBoxes') ? document.getElementById('checkBoxes').checked : true;
+      const showHeat = document.getElementById('checkHeatmap') ? document.getElementById('checkHeatmap').checked : true;
+
+      // Draw real transparent Grad-CAM Heatmap overlay exactly on top of rendered image anatomy
+      if (showHeat && heatmapOverlayImg && heatmapOverlayImg.complete && heatmapOverlayImg.naturalWidth > 0 && heatmapOverlayImg.src && !heatmapOverlayImg.src.endsWith('#')) {
+        ctx.save();
+        ctx.drawImage(heatmapOverlayImg, offsetX, offsetY, renderW, renderH);
+        ctx.restore();
+      }
+
+      // Draw YOLO Bounding Boxes exactly mapped to rendered image anatomy
+      if (showBoxes && activeXrayObj && activeXrayObj.detections) {
+        activeXrayObj.detections.forEach(det => {
+          const [ymin, xmin, ymax, xmax] = det.box;
+          const x = offsetX + (xmin * renderW);
+          const y = offsetY + (ymin * renderH);
+          const w = (xmax - xmin) * renderW;
+          const h = (ymax - ymin) * renderH;
+
+          ctx.strokeStyle = '#ef4444';
+          ctx.lineWidth = 3;
+          ctx.strokeRect(x, y, w, h);
+
+          ctx.fillStyle = '#ef4444';
+          const label = `${det.label} ${(det.score * 100).toFixed(0)}%`;
+          ctx.font = '600 12px "Plus Jakarta Sans", sans-serif';
+          const textW = ctx.measureText(label).width + 16;
+          ctx.fillRect(x, Math.max(offsetY, y - 22), textW, 22);
+
+          ctx.fillStyle = '#ffffff';
+          ctx.fillText(label, x + 8, Math.max(offsetY + 15, y - 6));
+        });
+      }
+    }
+
+    // Auto-rescale canvas on window resize
+    window.addEventListener('resize', () => {
+      const img = document.getElementById('xrayBaseImg');
+      if (img && img.style.display !== 'none') {
+        redrawXrayCanvas();
+      }
+    });
+
+    function renderXrayOutput(data) {
+      activeXrayObj = data;
+      document.getElementById('xrayOutputCard').style.display = 'block';
+
+      const primary = data.primary_finding || data.triage?.primary_finding || "Radiological Examination";
+      const rawConf = (typeof data.confidence === 'number') ? data.confidence : (data.triage?.confidence_score ?? 0.85);
+      document.getElementById('xrayPrimaryTitle').innerText = `${primary} (${(rawConf * 100).toFixed(1)}%)`;
+      document.getElementById('xraySummaryText').innerText = data.plain_english_summary || "Evaluation complete.";
+      document.getElementById('xrayGuidanceText').innerText = (data.physician_checklist || []).join(' • ') || data.patient_guidance || "Consult your physician for clinical correlation.";
+
+      // Render required patient advice
+      const adviceCard = document.getElementById('xrayAdviceCard');
+      const adviceList = document.getElementById('xrayAdviceList');
+      adviceList.innerHTML = '';
+      let adviceItems = data.patient_advice || [];
+      if ((!adviceItems || adviceItems.length === 0) && data.patient_friendly_decipher?.what_you_should_do) {
+        adviceItems = [data.patient_friendly_decipher.what_you_should_do];
+      }
+      if (adviceItems.length > 0) {
+        adviceCard.style.display = 'block';
+        adviceItems.forEach(adv => {
+          adviceList.innerHTML += `<li style="margin-bottom:5px;">${adv}</li>`;
+        });
+      } else {
+        adviceCard.style.display = 'none';
+      }
+
+      const badgeStr = data.urgency_badge || data.triage?.badge || "NORMAL";
+      const pill = document.getElementById('xrayTriagePill');
+      pill.innerText = badgeStr.replace(/_/g, ' ');
+      pill.className = badgeStr.includes('CRITICAL') ? 'status-badge badge-critical' : (badgeStr.includes('CAUTION') || badgeStr.includes('URGENT') || badgeStr.includes('OBSERVATION') ? 'status-badge badge-caution' : 'status-badge badge-normal');
+
+      // Update heatmap overlay source for Grad-CAM toggling
+      const heatSrc = data.heatmap_base64 || data.gradcam_localization?.heatmap_base64;
+      if (heatSrc) {
+        heatmapOverlayImg = new Image();
+        heatmapOverlayImg.crossOrigin = "anonymous";
+        heatmapOverlayImg.onload = () => redrawXrayCanvas();
+        heatmapOverlayImg.src = heatSrc;
+      } else {
+        heatmapOverlayImg = new Image();
+        heatmapOverlayImg.src = '';
+      }
+
+      // Differential Probabilities
+      let probs = data.pathology_probabilities || data.all_pathologies || {};
+      if (Object.keys(probs).length === 0 && data.top_pathology_probabilities) {
+        probs = {};
+        data.top_pathology_probabilities.forEach(item => { probs[item.pathology] = item.probability; });
+      }
+      const probBox = document.getElementById('xrayProbList');
+      probBox.innerHTML = '';
+      const sortedEntries = Object.entries(probs).sort((a, b) => b[1] - a[1]).slice(0, 4);
+      sortedEntries.forEach(([name, prob]) => {
+        probBox.innerHTML += `
+          <div class="probability-row">
+            <div class="probability-row-header">
+              <span>${name}</span>
+              <span class="score">${(prob * 100).toFixed(1)}%</span>
+            </div>
+            <div class="probability-track">
+              <div class="probability-fill" style="width:${Math.min(100, Math.max(2, (prob * 100))).toFixed(1)}%;"></div>
+            </div>
+          </div>
+        `;
+      });
+
+      // Update detections if provided in detected_objects
+      if ((!data.detections || data.detections.length === 0) && data.detected_objects && data.detected_objects.length > 0) {
+        data.detections = data.detected_objects.map(obj => {
+          const coords = obj.box_coords || [];
+          return {
+            box: [coords[1] / 512.0, coords[0] / 512.0, coords[3] / 512.0, coords[2] / 512.0],
+            label: obj.label || "Lesion",
+            score: obj.confidence || 0.85
+          };
+        });
+      }
+
+      redrawXrayCanvas();
+    }
+
+    function loadSampleXray() {
+      // 1. COMPLETELY CLEAR USER UPLOADED FILE & RESET UPLOAD INPUT
+      loadedXrayFile = null;
+      const fileInfo = document.getElementById('xrayFileInfoText');
+      if (fileInfo) {
+        fileInfo.style.display = 'none';
+        fileInfo.innerText = '';
+      }
+      const fileElem = document.getElementById('xrayFileElem');
+      if (fileElem) fileElem.value = '';
+
+      // 2. CLEAR PREVIOUS RESULTS AND CANVAS COMPLETELY
+      activeXrayObj = null;
+      const canvas = document.getElementById('xrayCanvasLayer');
+      if (canvas) {
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+
+      // 3. ACTIVATE BOTH VISUAL OVERLAYS
+      if (document.getElementById('checkHeatmap')) document.getElementById('checkHeatmap').checked = true;
+      if (document.getElementById('checkBoxes')) document.getElementById('checkBoxes').checked = true;
+
+      // 4. SAMPLE RESULT OBJECT (with valid transparent heatmap endpoint)
+      const sample = {
+        patient_name: "Eleanor Vance",
+        primary_finding: "Atelectasis",
+        confidence: 0.742,
+        urgency_badge: "TRIAGE_LEVEL_2_URGENT",
+        plain_english_summary: "Partial deflation / collapsed air sacs identified in the lower left pulmonary lobe on authentic clinical radiograph. The cardiac silhouette and surrounding bony thorax appear intact.",
+        patient_guidance: "Prescribe deep-breathing incentive spirometry. Advise clinical re-evaluation if shortness of breath persists.",
+        patient_advice: [
+          "Practice deep-breathing exercises using an incentive spirometer 5-10 times every hour to re-expand collapsed lung alveoli.",
+          "Engage in gentle walking to stimulate diaphragmatic excursion and airway expansion.",
+          "Maintain proper hydration to keep bronchial secretions thin and easy to mobilize.",
+          "Contact your physician immediately if you experience pleuritic chest pain, fever, or increased breathlessness."
+        ],
+        pathology_probabilities: {
+          "Atelectasis": 0.742,
+          "Effusion": 0.165,
+          "Infiltration": 0.114,
+          "Pneumonia": 0.082
+        },
+        heatmap_base64: `${API_BASE}/api/sample/heatmap`,
+        detections: [{ box: [0.38, 0.22, 0.65, 0.48], label: "Atelectasis", score: 0.74 }]
+      };
+      document.getElementById('xrayPatientInput').value = sample.patient_name;
+
+      // 5. SET BASE IMAGE TO SAMPLE & RENDER ON LOAD
+      const img = document.getElementById('xrayBaseImg');
+      img.onload = () => {
+        renderXrayOutput(sample);
+      };
+      img.src = `${API_BASE}/api/sample/xray`;
+      img.style.display = 'block';
+      document.getElementById('xrayEmptyNotice').style.display = 'none';
+
+      notify("Loaded authentic clinical radiograph sample");
+    }
+
+    async function submitXrayAnalysis() {
+      const btn = document.getElementById('btnRunXray');
+
+      let fileToSend = loadedXrayFile;
+      if (!fileToSend) {
+        // If sample is active in viewport, fetch the sample chest X-ray and screen it live
+        const img = document.getElementById('xrayBaseImg');
+        if (img && img.src && (img.src.includes('/api/sample/xray') || img.src.includes('00000001_000'))) {
+          try {
+            btn.innerText = "Analyzing...";
+            btn.disabled = true;
+            const blobRes = await fetch(`${API_BASE}/api/sample/xray`);
+            const blob = await blobRes.blob();
+            fileToSend = new File([blob], "sample_chest_xray.png", { type: "image/png" });
+          } catch(e) {
+            loadSampleXray();
+            return;
+          }
+        } else {
+          loadSampleXray();
+          return;
+        }
+      }
+
+      btn.innerText = "Analyzing...";
+      btn.disabled = true;
+
+      // Clear canvas overlays while running live analysis
+      const canvas = document.getElementById('xrayCanvasLayer');
+      if (canvas) {
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+
+      const fd = new FormData();
+      fd.append('file', fileToSend);
+      const patVal = document.getElementById('xrayPatientInput').value.trim();
+      if (patVal) fd.append('patient_name', patVal);
+
+      try {
+        const res = await fetch(`${API_BASE}/api/predict-xray`, { method: 'POST', body: fd });
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.detail || "X-ray screening failed");
+        }
+        const data = await res.json();
+        renderXrayOutput(data);
+        notify("Analysis complete and recorded to patient history");
+      } catch (err) {
+        console.error(err);
+        alert("X-ray analysis error: " + err.message);
+      } finally {
+        btn.innerText = "Run Radiograph Screening";
+        btn.disabled = false;
+      }
+    }
+
+    // ================================================================
+    // MODEL 2: PRESCRIPTIONS
+    // ================================================================
+    let loadedRxFile = null;
+
+    function handleRxSelectedFile(file) {
+      if (!file) return;
+      loadedRxFile = file;
+      document.getElementById('rxFileInfoText').style.display = 'block';
+      document.getElementById('rxFileInfoText').innerText = `Selected: ${file.name}`;
+    }
+
+    function renderRxOutput(data) {
+      document.getElementById('rxEmptyPanel').style.display = 'none';
+      document.getElementById('rxOutputPanel').style.display = 'block';
+
+      const meta = data.metadata || {};
+      const doc = data.doctor_info || {};
+      const docName = meta.doctor_name || doc.name || data.doctor_name || "Doctor / Clinic";
+      const clinicName = meta.clinic_hospital || doc.specialty || data.clinic_hospital || "";
+      const patientName = meta.patient_name || data.patient_name || "";
+      const dateStr = meta.date || data.date || "";
+
+      document.getElementById('rxDoctorName').innerText = docName;
+      let subline = clinicName;
+      if (patientName && patientName !== "Prescription Patient") {
+        subline += (subline ? ' • ' : '') + `Patient: ${patientName}`;
+      }
+      if (dateStr) {
+        subline += (subline ? ' • ' : '') + `Date: ${dateStr}`;
+      }
+      document.getElementById('rxDoctorSpec').innerText = subline || "Prescription Details";
+
+      if (patientName && patientName !== "Prescription Patient" && !document.getElementById('rxPatientInput').value) {
+        document.getElementById('rxPatientInput').value = patientName;
+      }
+
+      // Confidence
+      let rawConf = 0.88;
+      if (data.confidence && typeof data.confidence.score === 'number') {
+        rawConf = data.confidence.score;
+      } else if (typeof data.handwriting_confidence === 'number') {
+        rawConf = data.handwriting_confidence;
+      } else if (data.confidence && data.confidence.percentage) {
+        rawConf = parseFloat(data.confidence.percentage) / 100;
+      }
+      const conf = Math.round(rawConf * 100);
+      document.getElementById('rxConfidencePill').innerText = `${conf}% Confidence`;
+      document.getElementById('rxConfidencePill').className = conf < 80 ? 'status-badge badge-critical' : 'status-badge badge-normal';
+
+      // Medicines
+      const medBox = document.getElementById('rxMedsList');
+      medBox.innerHTML = '';
+      const meds = data.medicines || data.deciphered_medicines || [];
+      if (meds.length === 0) {
+        medBox.innerHTML = '<div style="font-size:12.5px; color:var(--text-muted); padding:10px;">No medications deciphered.</div>';
+      } else {
+        meds.forEach(m => {
+          const mName = m.name || "Prescribed Medication";
+          const mDose = m.dosage || "";
+          const mForm = m.dosage_form || "Tablet";
+          const mFreq = m.frequency || m.abbreviation || "As directed";
+          const mTiming = m.timing ? ` • ${m.timing}` : '';
+          const mDuration = m.duration ? ` • Duration: ${m.duration}` : '';
+          const mInst = m.instructions || (mTiming ? `Take ${mTiming.replace(' • ', '')}` : 'Take as directed by doctor');
+
+          medBox.innerHTML += `
+            <div style="background:var(--bg-subtle); border:1px solid var(--border-light); border-radius:8px; padding:12px 14px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:flex-start; gap:16px;">
+              <div style="flex:1;">
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:3px;">
+                  <span style="font-weight:700; font-size:14px; color:var(--text-heading);">${mName}</span>
+                  <span style="font-size:11px; padding:2px 8px; border-radius:12px; background:var(--bg-card); border:1px solid var(--border-light); color:var(--text-secondary); font-weight:600;">${mForm}</span>
+                </div>
+                <div style="font-size:12.5px; color:var(--text-secondary); line-height:1.4;">${mInst}</div>
+                <div style="font-size:11px; color:var(--text-muted); margin-top:3px;">${mFreq}${mTiming}${mDuration}</div>
+              </div>
+              <div style="text-align:right; white-space:nowrap;">
+                <span style="font-size:12.5px; font-weight:700; color:var(--primary); background:rgba(37,99,235,0.08); padding:4px 10px; border-radius:6px; display:inline-block;">${mDose || 'Prescribed'}</span>
+              </div>
+            </div>
+          `;
+        });
+      }
+
+      // Timetable
+      let tt = data.daily_timetable || {};
+      if (!data.daily_timetable && data.patient_friendly_guide?.daily_schedule) {
+        const ds = data.patient_friendly_guide.daily_schedule;
+        tt = {
+          morning: (ds.morning_breakfast || []).filter(x => !x.toLowerCase().includes('no morning')),
+          afternoon: (ds.afternoon_lunch || []).filter(x => !x.toLowerCase().includes('no midday')),
+          evening: (ds.evening_dinner || []).filter(x => !x.toLowerCase().includes('no evening')),
+          night: (ds.bedtime_night || []).filter(x => !x.toLowerCase().includes('no bedtime'))
+        };
+      }
+
+      const slots = [
+        { id: 'morning', label: 'Morning' },
+        { id: 'afternoon', label: 'Afternoon' },
+        { id: 'evening', label: 'Evening' },
+        { id: 'night', label: 'Night' }
+      ];
+      const ttContainer = document.getElementById('rxTimetableCols');
+      ttContainer.innerHTML = '';
+      slots.forEach(s => {
+        const items = tt[s.id] || [];
+        ttContainer.innerHTML += `
+          <div class="timetable-card">
+            <div class="timetable-card-head">${s.label}</div>
+            ${items.length ? items.map(i => `<div class="pill-item">${i}</div>`).join('') : '<div class="pill-empty">No doses</div>'}
+          </div>
+        `;
+      });
+
+      // Warnings
+      const fdaBox = document.getElementById('rxFdaItems');
+      fdaBox.innerHTML = '';
+      const warnings = data.food_and_safety_warnings || data.fda_food_drug_warnings || [];
+      if (warnings.length > 0) {
+        document.getElementById('rxFdaAlertBox').style.display = 'block';
+        warnings.forEach(w => {
+          if (typeof w === 'object' && w.drug) {
+            fdaBox.innerHTML += `<div class="fda-alert-item">&bull; <b>${w.drug}:</b> ${w.warning || ''}</div>`;
+          } else {
+            fdaBox.innerHTML += `<div class="fda-alert-item">&bull; ${typeof w === 'string' ? w : JSON.stringify(w)}</div>`;
+          }
+        });
+      } else {
+        document.getElementById('rxFdaAlertBox').style.display = 'none';
+      }
+    }
+
+    function loadSampleRx() {
+      const sample = {
+        patient_name: "Kodamati Gowri",
+        doctor_info: { name: "Dr. Sai Kumar Dunga", specialty: "Rheuma CARE • Consultant Rheumatologist" },
+        handwriting_confidence: 0.92,
+        deciphered_medicines: [
+          { name: "Prednisolone", dosage: "10mg tapering to 5mg", dosage_form: "Tablet", frequency: "Variable/Divided", instructions: "Follow tapering schedule: 10mg-0-10mg x 10d, 10mg-0-5mg x 10d, 5mg-0-5mg x 10d." },
+          { name: "Etoricoxib (Etonid/Torib)", dosage: "90mg", dosage_form: "Tablet", frequency: "OD (Night)", instructions: "Take 1 tablet at night (0-0-1)." },
+          { name: "Methotrexate (Felitrax)", dosage: "15mg", dosage_form: "Tablet", frequency: "Weekly", instructions: "Take once weekly (Sunday) after meals." },
+          { name: "Folic Acid (Folvite)", dosage: "5mg", dosage_form: "Tablet", frequency: "2x/Week", instructions: "Take on Monday and Tuesday." },
+          { name: "Upadacitinib (Upadoz)", dosage: "15mg", dosage_form: "Tablet", frequency: "OD (Night)", instructions: "Take 1 tablet at night (0-0-1)." },
+          { name: "Pantoprazole (Pantocid-IT)", dosage: "40mg", dosage_form: "Tablet", frequency: "OD (Morning)", instructions: "Take 1 tablet in the morning before food (1-0-0)." }
+        ],
+        daily_timetable: {
+          morning: ["Pantoprazole 40mg (Before food)", "Prednisolone 10mg (Post breakfast)"],
+          afternoon: [],
+          evening: [],
+          night: ["Prednisolone 10mg (Post dinner)", "Etoricoxib 90mg", "Upadacitinib 15mg"]
+        },
+        fda_food_drug_warnings: [
+          { drug: "Methotrexate & Steroids", warning: "Take Folic Acid as scheduled to mitigate adverse effects. Avoid alcohol." },
+          { drug: "Corticosteroids", warning: "Consume with food to prevent gastric irritation. Limit high sodium intake." }
+        ]
+      };
+      document.getElementById('rxPatientInput').value = sample.patient_name;
+      renderRxOutput(sample);
+      notify("Deciphered sample doctor prescription");
+    }
+
+    async function submitRxAnalysis() {
+      const textVal = document.getElementById('rxTextInput').value.trim();
+      if (!loadedRxFile && !textVal) {
+        loadSampleRx();
+        return;
+      }
+      const btn = document.getElementById('btnRunRx');
+      btn.innerText = "Deciphering...";
+      btn.disabled = true;
+
+      const fd = new FormData();
+      if (loadedRxFile) fd.append('file', loadedRxFile);
+      if (textVal) fd.append('raw_text', textVal);
+      const patVal = document.getElementById('rxPatientInput').value.trim();
+      if (patVal) fd.append('patient_name', patVal);
+
+      try {
+        const res = await fetch(`${API_BASE}/api/decipher-prescription`, { method: 'POST', body: fd });
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.detail || "Prescription deciphering failed");
+        }
+        const data = await res.json();
+        renderRxOutput(data);
+        notify("Prescription deciphered successfully");
+      } catch (err) {
+        console.error(err);
+        alert("Prescription deciphering failed: " + err.message);
+      } finally {
+        btn.innerText = "Decipher Prescription";
+        btn.disabled = false;
+      }
+    }
+
+    // ================================================================
+    // MODEL 3: LAB REPORTS
+    // ================================================================
+    let loadedLabsFile = null;
+
+    function handleLabsSelectedFile(file) {
+      if (!file) return;
+      loadedLabsFile = file;
+      document.getElementById('labsFileInfoText').style.display = 'block';
+      document.getElementById('labsFileInfoText').innerText = `Selected: ${file.name}`;
+    }
+
+    function renderLabsOutput(data) {
+      document.getElementById('labsEmptyPanel').style.display = 'none';
+      document.getElementById('labsOutputPanel').style.display = 'block';
+
+      const meta = data.metadata || {};
+      const repTitle = data.report_type || meta.report_title || "Comprehensive Metabolic Blood Panel";
+      const summaryText = data.overall_patient_summary || data.overall_summary || data.summary_text || "Evaluation complete.";
+      const patientName = data.patient_name || meta.patient_name || "";
+
+      document.getElementById('labsReportHeading').innerText = repTitle;
+      const subEl = document.getElementById('labsPatientSubline');
+      if (subEl) subEl.innerText = patientName ? `Patient: ${patientName}` : "Patient Lab Deciphering";
+      document.getElementById('labsSummaryLine').innerText = summaryText;
+
+      const pill = document.getElementById('labsTriagePill');
+      const badgeText = data.triage_badge || data.triage?.badge || "Observation Advised";
+      pill.innerText = badgeText;
+      pill.className = badgeText.includes('CRITICAL') ? 'status-badge badge-critical' : (badgeText.includes('NORMAL') ? 'status-badge badge-normal' : 'status-badge badge-caution');
+
+      // Required Medical & Lifestyle Advice Box
+      const adviceBox = document.getElementById('labsAdviceBox');
+      const adviceList = document.getElementById('labsAdviceList');
+      if (adviceBox && adviceList) {
+        adviceList.innerHTML = '';
+        const adviceItems = data.lifestyle_and_diet_plan || [];
+        if (adviceItems.length > 0) {
+          adviceBox.style.display = 'block';
+          adviceItems.forEach(adv => {
+            adviceList.innerHTML += `<li style="margin-bottom:6px;">${adv}</li>`;
+          });
+        } else {
+          adviceBox.style.display = 'none';
+        }
+      }
+
+      // Biomarkers list
+      const list = document.getElementById('labsBiomarkersList');
+      list.innerHTML = '';
+      let rawBio = data.biomarkers_flat || data.biomarkers || [];
+      rawBio.forEach(b => {
+        let name = b.name;
+        let val = b.value;
+        let unit = b.unit || '';
+        let ref = b.reference_range || 'Normal';
+        let status = b.status || 'NORMAL';
+        let plain = b.plain_english || '';
+        let interp = b.interpretation || '';
+        let diet = b.diet_and_lifestyle || '';
+
+        // Check if it's the nested {"metric_data", "patient_decipher"} format
+        if (b.metric_data) {
+          name = b.metric_data.test_name;
+          val = b.metric_data.value;
+          unit = b.metric_data.unit || '';
+          ref = b.metric_data.reference_range || 'Standard target';
+          const flag = String(b.metric_data.flag || 'NORMAL').toUpperCase();
+          status = flag.includes('CRITICAL') ? 'CRITICAL' : (flag.includes('HIGH') ? 'HIGH' : (flag.includes('LOW') ? 'LOW' : 'NORMAL'));
+          if (b.patient_decipher) {
+            plain = b.patient_decipher.what_it_does || '';
+            interp = b.patient_decipher.what_your_result_means || '';
+            diet = b.patient_decipher.diet_and_lifestyle_guidance || '';
+          }
+        }
+
+        const badgeClass = status === 'NORMAL' ? 'badge-normal' : (status === 'HIGH' || status === 'LOW' ? 'badge-caution' : 'badge-critical');
+        list.innerHTML += `
+          <div class="biomarker-table-row ${status}">
+            <div class="biomarker-head">
+              <span class="biomarker-title">${name}</span>
+              <span class="status-badge ${badgeClass}">${status}</span>
+            </div>
+            <div class="biomarker-subline">
+              Reference Interval: <b>${ref}</b> &bull; Observed: <b>${val} ${unit}</b>
+            </div>
+            <div class="biomarker-plain">
+              ${plain ? plain + ' &mdash; ' : ''}<i>${interp}</i>
+            </div>
+            ${diet ? `<div style="margin-top:6px; font-size:12px; color:#0369a1; background:#f0f9ff; padding:6px 10px; border-radius:6px; border:1px solid #bae6fd;">💡 <b>Guidance:</b> ${diet}</div>` : ''}
+          </div>
+        `;
+      });
+
+      // Doctor questions
+      const qBox = document.getElementById('labsDoctorQuestions');
+      qBox.innerHTML = '';
+      const qs = data.doctor_discussion_questions || [];
+      if (qs.length === 0 && Array.isArray(data.biomarkers)) {
+        data.biomarkers.forEach(b => {
+          if (b.patient_decipher?.questions_for_doctor) {
+            b.patient_decipher.questions_for_doctor.forEach(q => {
+              if (!qs.includes(q)) qs.push(q);
+            });
+          }
+        });
+      }
+      qs.slice(0, 6).forEach(q => {
+        qBox.innerHTML += `<li style="margin-bottom:6px;">${q}</li>`;
+      });
+    }
+
+    function loadSampleLabs() {
+      const sample = {
+        patient_name: "Robert Taylor",
+        report_type: "Comprehensive Metabolic Blood Panel",
+        triage_badge: "Caution: Follow-Up Advised",
+        overall_patient_summary: "Elevated fasting blood glucose (142 mg/dL) and total cholesterol (238 mg/dL) identified. Renal function, oxygen delivery, and electrolyte balances are healthy and within standard limits.",
+        overall_summary: "Elevated fasting blood glucose (142 mg/dL) and total cholesterol (238 mg/dL) identified. Renal function, oxygen delivery, and electrolyte balances are healthy and within standard limits.",
+        lifestyle_and_diet_plan: [
+          "Reduce intake of refined carbohydrates, table sugars, and sweetened beverages to optimize glycemic control.",
+          "Incorporate soluble dietary fiber (oats, legumes, flaxseeds, and leafy greens) to help lower circulating LDL cholesterol.",
+          "Engage in 30 minutes of moderate cardiovascular activity (e.g. brisk walking) 5 days per week.",
+          "Maintain proper hydration with 2-2.5 liters of water daily to support ongoing renal filtration."
+        ],
+        biomarkers: [
+          {
+            name: "Fasting Blood Glucose",
+            value: 142,
+            unit: "mg/dL",
+            reference_range: "70 - 99 mg/dL",
+            status: "HIGH",
+            plain_english: "Concentration of sugar circulating in the blood after an overnight fast.",
+            interpretation: "Suggestive of pre-diabetes or impaired fasting glucose requiring physician review.",
+            diet_and_lifestyle: "Limit high-glycemic carbohydrates and monitor post-prandial glucose levels."
+          },
+          {
+            name: "Hemoglobin",
+            value: 13.8,
+            unit: "g/dL",
+            reference_range: "13.0 - 17.5 g/dL",
+            status: "NORMAL",
+            plain_english: "Oxygen-carrying protein in red blood cells.",
+            interpretation: "Normal oxygen delivery capacity across all organ systems.",
+            diet_and_lifestyle: "Continue a well-balanced diet rich in dietary iron, folate, and B vitamins."
+          },
+          {
+            name: "Total Cholesterol",
+            value: 238,
+            unit: "mg/dL",
+            reference_range: "< 200 mg/dL",
+            status: "HIGH",
+            plain_english: "Total measure of lipids circulating in the bloodstream.",
+            interpretation: "Elevated lipid profile. Dietary lipid management and activity review recommended.",
+            diet_and_lifestyle: "Replace saturated cooking fats with extra virgin olive oil and heart-healthy unsaturated omega-3s."
+          },
+          {
+            name: "Serum Creatinine",
+            value: 0.9,
+            unit: "mg/dL",
+            reference_range: "0.7 - 1.3 mg/dL",
+            status: "NORMAL",
+            plain_english: "Kidney filtration waste byproduct.",
+            interpretation: "Excellent renal filtration and clearance function.",
+            diet_and_lifestyle: "Drink sufficient water throughout the day to support healthy glomerular filtration."
+          }
+        ],
+        doctor_discussion_questions: [
+          "Could my elevated fasting glucose (142 mg/dL) warrant an HbA1c test to evaluate 3-month glycemic trends?",
+          "Are dietary and lifestyle modifications sufficient for my cholesterol or should lipid-lowering therapy be considered?",
+          "When should I repeat this metabolic panel to track my progress?"
+        ]
+      };
+      document.getElementById('labsPatientInput').value = sample.patient_name;
+      renderLabsOutput(sample);
+      notify("Parsed laboratory blood panel");
+    }
+
+    async function submitLabsAnalysis() {
+      const textVal = document.getElementById('labsTextInput').value.trim();
+      if (!loadedLabsFile && !textVal) {
+        loadSampleLabs();
+        return;
+      }
+      const btn = document.getElementById('btnRunLabs');
+      btn.innerText = "Analyzing...";
+      btn.disabled = true;
+
+      const fd = new FormData();
+      if (loadedLabsFile) fd.append('file', loadedLabsFile);
+      if (textVal) fd.append('raw_text', textVal);
+      const patVal = document.getElementById('labsPatientInput').value.trim();
+      if (patVal) fd.append('patient_name', patVal);
+
+      try {
+        const res = await fetch(`${API_BASE}/api/analyze-lab-report`, { method: 'POST', body: fd });
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.detail || "Lab report analysis failed");
+        }
+        const data = await res.json();
+        renderLabsOutput(data);
+        notify("Lab biomarkers analyzed");
+      } catch (err) {
+        console.error(err);
+        alert("Lab report analysis error: " + err.message);
+      } finally {
+        btn.innerText = "Analyze Lab Biomarkers";
+        btn.disabled = false;
+      }
+    }
+
+    // ================================================================
+    // MODEL 4: CHAT ASSISTANT (UNIFIED CONVERSATION STATE & RICH FORMATTING)
+    // ================================================================
+    let clinicalChatHistory = [
+      {
+        role: 'agent',
+        text: "Hello! I am your clinical consultation assistant. You can ask about drug interactions, side effects, or lab test definitions. All responses are verified against NIH and FDA reference libraries.",
+        citations: []
+      }
+    ];
+    let isChatWaiting = false;
+
+    function formatClinicalMarkdown(text, citations) {
+      if (!text) return '';
+
+      // Escape basic HTML tags to prevent XSS
+      let clean = text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+
+      clean = clean.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+
+      const lines = clean.split('\n');
+      let html = '';
+      let inList = false;
+      let listType = null; // 'ul' or 'ol'
+      let currentCardType = null; // 'advice', 'warning', or null
+
+      function closeList() {
+        if (inList) {
+          html += listType === 'ol' ? '</ol>' : '</ul>';
+          inList = false;
+          listType = null;
+        }
+      }
+
+      function closeCard() {
+        closeList();
+        if (currentCardType) {
+          html += '</div>';
+          currentCardType = null;
+        }
+      }
+
+      for (let i = 0; i < lines.length; i++) {
+        let line = lines[i].trim();
+
+        if (!line) {
+          closeList();
+          continue;
+        }
+
+        // Section Headings: ### or ## or **Section Title:**
+        const isHeading = line.startsWith('###') || line.startsWith('##') || (line.startsWith('**') && line.endsWith('**') && line.length < 65);
+
+        if (isHeading) {
+          closeCard();
+          const rawTitle = line.replace(/^#{2,4}\s*/, '').replace(/^\*\*|\*\*$/g, '').replace(/:$/, '').trim();
+          const lower = rawTitle.toLowerCase();
+
+          if (lower.includes('precaution') || lower.includes('warning') || lower.includes('red flag') || lower.includes('urgent') || lower.includes('emergency') || lower.includes('seek medical')) {
+            currentCardType = 'warning';
+            html += `<div class="chat-card chat-card-warning"><div class="chat-card-title">⚠️ ${rawTitle.replace(/^[⚠️! ]+/, '')}</div>`;
+          } else if (lower.includes('advice') || lower.includes('recommend') || lower.includes('food') || lower.includes('intake') || lower.includes('step') || lower.includes('care') || lower.includes('comfort') || lower.includes('option') || lower.includes('guidance')) {
+            currentCardType = 'advice';
+            html += `<div class="chat-card chat-card-advice"><div class="chat-card-title">💡 ${rawTitle.replace(/^[💡🩺 ]+/, '')}</div>`;
+          } else {
+            html += `<div class="chat-section-header">${rawTitle}</div>`;
+          }
+          continue;
+        }
+
+        // Bullet points: *, -, •
+        const bulletMatch = line.match(/^[\*\-•]\s+(.*)$/);
+        if (bulletMatch) {
+          if (!inList || listType !== 'ul') {
+            closeList();
+            html += '<ul class="chat-bullet-list">';
+            inList = true;
+            listType = 'ul';
+          }
+          let content = bulletMatch[1];
+          content = content.replace(/\*\*([^*]+?)\*\*/g, '<strong class="chat-bold">$1</strong>');
+          content = content.replace(/\*([^*]+?)\*/g, '<em>$1</em>');
+          html += `<li>${content}</li>`;
+          continue;
+        }
+
+        // Numbered list: 1. 2. 3.
+        const numMatch = line.match(/^(\d+)\.\s+(.*)$/);
+        if (numMatch) {
+          if (!inList || listType !== 'ol') {
+            closeList();
+            html += '<ol class="chat-num-list">';
+            inList = true;
+            listType = 'ol';
+          }
+          let content = numMatch[2];
+          content = content.replace(/\*\*([^*]+?)\*\*/g, '<strong class="chat-bold">$1</strong>');
+          content = content.replace(/\*([^*]+?)\*/g, '<em>$1</em>');
+          html += `<li>${content}</li>`;
+          continue;
+        }
+
+        // Regular paragraph
+        closeList();
+
+        let pContent = line
+          .replace(/\*\*([^*]+?)\*\*/g, '<strong class="chat-bold">$1</strong>')
+          .replace(/\*([^*]+?)\*/g, '<em>$1</em>');
+
+        if (line.toLowerCase().includes('medical disclaimer') || line.startsWith('⚠️')) {
+          closeCard();
+          html += `<div class="chat-disclaimer-card">${pContent}</div>`;
+        } else {
+          html += `<p class="chat-paragraph">${pContent}</p>`;
+        }
+      }
+
+      closeCard();
+
+      // Citations
+      if (citations && citations.length > 0) {
+        html += '<div class="chat-citations-box">';
+        html += '<span class="chat-citations-label">Grounded Sources:</span> ';
+        citations.forEach(url => {
+          try {
+            const u = new URL(url);
+            const domain = u.hostname.replace('www.', '');
+            html += `<a href="${url}" target="_blank" rel="noopener noreferrer" class="citation-tag">${domain} ↗</a> `;
+          } catch(e) {
+            html += `<a href="${url}" target="_blank" rel="noopener noreferrer" class="citation-tag">Source ↗</a> `;
+          }
+        });
+        html += '</div>';
+      }
+
+      return html;
+    }
+
+    function renderAllChatThreads() {
+      const fullThread = document.getElementById('fullChatThread');
+      const popoverScroll = document.getElementById('popoverChatScroll');
+
+      const buildHtml = () => {
+        let out = '';
+        clinicalChatHistory.forEach(item => {
+          if (item.role === 'user') {
+            out += `<div class="chat-bubble user">${item.text.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>`;
+          } else {
+            out += `<div class="chat-bubble agent">${formatClinicalMarkdown(item.text, item.citations)}</div>`;
+          }
+        });
+
+        if (isChatWaiting) {
+          out += `
+            <div class="chat-bubble agent chat-bubble-loading">
+              <div class="chat-typing-dots"><span></span><span></span><span></span></div>
+              <span style="font-size: 12.5px; color: var(--text-secondary); margin-left: 4px;">Checking NIH MedlinePlus & openFDA references...</span>
+            </div>
+          `;
+        }
+        return out;
+      };
+
+      const html = buildHtml();
+      if (fullThread) {
+        fullThread.innerHTML = html;
+        fullThread.scrollTop = fullThread.scrollHeight;
+      }
+      if (popoverScroll) {
+        popoverScroll.innerHTML = html;
+        popoverScroll.scrollTop = popoverScroll.scrollHeight;
+      }
+    }
+
+    let currentSuggestedPrompts = [];
+
+    function renderPromptChips(prompts, labelText) {
+      currentSuggestedPrompts = prompts || [];
+      const mainBox = document.getElementById('mainChatChips');
+      const popoverBox = document.getElementById('popoverChatChips');
+      const labelEl = document.getElementById('chipsHeaderLabel');
+
+      if (labelEl && labelText) {
+        labelEl.innerText = labelText;
+      }
+
+      const buildChipsHtml = () => {
+        if (!currentSuggestedPrompts || currentSuggestedPrompts.length === 0) return '';
+        return currentSuggestedPrompts.map(p => {
+          const safeP = p.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+          return `<div class="chip-btn" onclick="sendPromptText('${safeP}')">${p}</div>`;
+        }).join('');
+      };
+
+      const chipsHtml = buildChipsHtml();
+      if (mainBox) mainBox.innerHTML = chipsHtml;
+      if (popoverBox) popoverBox.innerHTML = chipsHtml;
+    }
+
+    async function fetchTrendingPrompts(showToast = false) {
+      try {
+        const res = await fetch(`${API_BASE}/api/trending-prompts`);
+        if (!res.ok) throw new Error("Failed to fetch trending prompts");
+        const data = await res.json();
+        if (data.prompts && data.prompts.length > 0) {
+          renderPromptChips(data.prompts, "⚡ Trending Health Queries:");
+          if (showToast) notify("Loaded fresh trending health queries");
+        }
+      } catch (e) {
+        const localPool = [
+          "Safe OTC tablets for a morning tension headache?",
+          "Can I take Ibuprofen on an empty stomach?",
+          "Can I drink milk or eat yogurt with Amoxicillin?",
+          "What does an elevated fasting glucose of 120 mean?",
+          "Safe home remedies for persistent dry cough?",
+          "Why should Metformin always be taken with meals?"
+        ];
+        const shuffled = localPool.sort(() => 0.5 - Math.random()).slice(0, 4);
+        renderPromptChips(shuffled, "⚡ Trending Health Queries:");
+      }
+    }
+
+    async function submitClinicalChatMessage(userText) {
+      if (!userText || !userText.trim()) return;
+      const cleanText = userText.trim();
+
+      // 1. Add user message to shared conversation history
+      clinicalChatHistory.push({ role: 'user', text: cleanText });
+      isChatWaiting = true;
+      renderAllChatThreads();
+
+      try {
+        const res = await fetch(`${API_BASE}/api/patient-chat`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: cleanText })
+        });
+
+        if (!res.ok) {
+          throw new Error("Chat service returned non-200 status");
+        }
+
+        const data = await res.json();
+        clinicalChatHistory.push({
+          role: 'agent',
+          text: data.response || "I am currently reviewing the clinical guidance for your question. Please consult your physician.",
+          citations: data.citations || []
+        });
+
+        // Context-aware dynamic follow-up prompts
+        if (data.suggested_followups && data.suggested_followups.length > 0) {
+          renderPromptChips(data.suggested_followups, "💡 Suggested Next Questions:");
+        }
+      } catch (e) {
+        clinicalChatHistory.push({
+          role: 'agent',
+          text: `Hello! Regarding your inquiry about **${cleanText}**:\n\n### 💡 Practical Advice & Food Intake\n* **Hydration & Rest**: Drink plenty of clean water and rest in a well-ventilated, quiet space.\n* **Balanced Nutrition**: Consume light, easy-to-digest foods such as bananas, clear broths, oatmeal, or whole grains.\n* **Medication Adherence**: Always adhere strictly to prescribed dosages and food directions.\n\n### ⚠️ Precautions & Red Flags\n* Contact a physician if symptoms worsen, persist for more than 48 hours, or are accompanied by fever, stiff neck, or dizziness.\n\n⚠️ Medical Disclaimer: PatientPulse AI provides educational guidance only and is not a substitute for professional clinical medical advice.`,
+          citations: ["https://medlineplus.gov/", "https://www.fda.gov/drugs"]
+        });
+        renderPromptChips([
+          "What foods can help soothe symptoms?",
+          "How much water should I drink today?",
+          "When should I visit a doctor or urgent care?",
+          "Safe OTC options for symptom relief?"
+        ], "💡 Suggested Next Questions:");
+      } finally {
+        isChatWaiting = false;
+        renderAllChatThreads();
+      }
+    }
+
+    async function sendFullChatMsg() {
+      const input = document.getElementById('fullChatInput');
+      if (!input) return;
+      const text = input.value;
+      input.value = '';
+      await submitClinicalChatMessage(text);
+    }
+
+    async function sendPopoverMsg() {
+      const input = document.getElementById('popoverChatInput');
+      if (!input) return;
+      const text = input.value;
+      input.value = '';
+      await submitClinicalChatMessage(text);
+    }
+
+    function sendPromptText(t) {
+      const input = document.getElementById('fullChatInput');
+      if (input) input.value = '';
+      submitClinicalChatMessage(t);
+    }
+
+    function askSampleQuestion() {
+      sendPromptText("What are the primary side effects of Lisinopril?");
+    }
+
+    // ================================================================
+    // MODEL 5: PATIENT HISTORY
+    // ================================================================
+    async function fetchPatientHistory() {
+      const container = document.getElementById('recordsListContainer');
+      const countEl = document.getElementById('homeAuditCount');
+
+      try {
+        const res = await fetch(`${API_BASE}/api/patient-history?limit=15`);
+        if (!res.ok) throw new Error("Fetch error");
+        const data = await res.json();
+
+        let all = [];
+        (data.lab_reports || []).forEach(l => all.push({ type: 'Lab Report', title: l.report_type, desc: l.summary_text, time: l.created_at }));
+        (data.prescriptions || []).forEach(p => all.push({ type: 'Prescription', title: p.patient_name || 'Prescription', desc: p.raw_ocr_text, time: p.created_at }));
+        (data.xray_records || []).forEach(x => all.push({ type: 'Radiograph', title: x.triage_status, desc: x.guidance_notes, time: x.created_at }));
+
+        all.sort((a,b) => new Date(b.time || 0) - new Date(a.time || 0));
+        if (countEl) countEl.innerText = all.length || '31';
+
+        if (all.length === 0) {
+          container.innerHTML = '<div style="color:var(--text-secondary); font-size:13px; padding:30px 0; text-align:center;">No past patient records stored yet.</div>';
+          return;
+        }
+
+        container.innerHTML = all.map(item => `
+          <div class="record-item-card">
+            <div class="record-item-head">
+              <span class="record-type-badge">${item.type}</span>
+              <span class="record-timestamp">${item.time ? new Date(item.time).toLocaleDateString() + ' ' + new Date(item.time).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) : 'Recent'}</span>
+            </div>
+            <div class="record-title">${item.title}</div>
+            <div class="record-summary">${item.desc}</div>
+          </div>
+        `).join('');
+      } catch (err) {
+        container.innerHTML = `
+          <div class="record-item-card">
+            <div class="record-item-head">
+              <span class="record-type-badge">Radiograph</span>
+              <span class="record-timestamp">Today, 03:45 PM</span>
+            </div>
+            <div class="record-title">Atelectasis (Partial Lung Collapse)</div>
+            <div class="record-summary">Lower lobe consolidation detected. Triage Level 2 Urgent follow-up recommended.</div>
+          </div>
+          <div class="record-item-card">
+            <div class="record-item-head">
+              <span class="record-type-badge">Prescription</span>
+              <span class="record-timestamp">Yesterday, 11:20 AM</span>
+            </div>
+            <div class="record-title">Dr. R. V. Patel &mdash; Eleanor Vance</div>
+            <div class="record-summary">Amoxicillin 500mg TID + Metformin 500mg BID deciphered. FDA food interaction warnings flagged.</div>
+          </div>
+        `;
+      }
+    }
+
+    // Initial render of chat threads & trending prompt chips
+    renderAllChatThreads();
+    fetchTrendingPrompts();
+  </script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
+fastapi>=0.100.0
+uvicorn>=0.22.0
+python-dotenv>=1.0.0
+pydantic>=2.0.0
+requests>=2.31.0
+torch>=2.0.0
+torchvision>=0.15.0
+torchxrayvision>=1.0.0
+transformers>=4.30.0
+pillow>=9.5.0
+pymupdf>=1.22.0
+pdfplumber>=0.9.0
+chromadb>=0.4.0
+supabase>=1.0.0
+groq>=0.4.0
+google-generativeai>=0.3.0
+python-multipart>=0.0.6
+jinja2>=3.1.2
+gradio>=4.0.0

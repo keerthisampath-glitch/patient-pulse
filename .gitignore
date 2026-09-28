@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+
+# Environment Variables & Secrets
+.env
+.env.local
+
+# Cached Models & Heavy Weights
+Models/cv/*.pth
+Models/ocr/*.bin
+Models/nlp/*.bin
+*.h5
+
+# Databases & Local Stores
+*.db
+*.sqlite3
+chroma_db/
+
+# Uploaded Raw Files
+Data/raw/*
+!Data/raw/.gitkeep
+!Data/raw/chest_xrays/00000001_000.png
+Data/processed/*
+!Data/processed/.gitkeep
+!Data/processed/heatmaps/gradcam_atelectasis_64.png
+
+# IDE
+.vscode/
+.idea/

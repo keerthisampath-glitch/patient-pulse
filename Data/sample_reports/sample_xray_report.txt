@@ -1,0 +1,17 @@
+ST. JUDE RADIOLOGY & IMAGING CENTER
+CHEST X-RAY (PA VIEW) REPORT
+--------------------------------------------------------------------
+Patient: Robert Vance                   Age: 52 / Male
+Date: 29-Aug-2026                       Accession No: RAD-9921
+--------------------------------------------------------------------
+FINDINGS:
+- Lungs show patchy airspace opacities in the right lower lobe.
+- Minimal right-sided pleural effusion noted.
+- Cardiac size silhouette appears within normal limits.
+- Bony thorax and diaphragm appear intact.
+
+IMPRESSION:
+Visual findings suspicious for Right Lower Lobe Pneumonia with mild effusion.
+Clinical correlation and antibiotic management recommended.
+--------------------------------------------------------------------
+Radiologist: Dr. M. K. Nambiar, MD (Radiology)

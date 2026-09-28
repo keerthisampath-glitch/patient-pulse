@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PatientPulse AI — Medical Report & Prescription Decipher Viewer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07090e;
+      --card-bg: #0e131f;
+      --card-border: #1e293b;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-glow: rgba(56, 189, 248, 0.2);
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --purple: #8b5cf6;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding: 24px;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--card-border);
+      margin-bottom: 24px;
+    }
+    .logo-area { display: flex; align-items: center; gap: 14px; }
+    .logo-badge {
+      background: linear-gradient(135deg, #0284c7, #8b5cf6);
+      width: 44px; height: 44px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; font-weight: 800; color: white;
+    }
+    .title-box h1 { font-size: 22px; font-weight: 700; }
+    .title-box p { font-size: 13px; color: var(--text-muted); }
+    
+    .nav-tabs {
+      display: flex; gap: 10px; background: #0b0f19; padding: 6px;
+      border-radius: 12px; border: 1px solid var(--card-border);
+    }
+    .nav-btn {
+      background: transparent; border: none; color: var(--text-muted);
+      padding: 8px 18px; border-radius: 8px; cursor: pointer;
+      font-weight: 600; font-size: 13px; transition: all 0.2s;
+    }
+    .nav-btn.active {
+      background: var(--card-bg); color: var(--accent);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+    
+    /* View Switcher */
+    .view-switcher-bar {
+      background: linear-gradient(90deg, #111827, #0b1329);
+      border: 1px solid #1e293b; border-radius: 16px;
+      padding: 14px 20px; display: flex; justify-content: space-between;
+      align-items: center; margin-bottom: 24px;
+    }
+    .switcher-btns { display: flex; gap: 8px; }
+    .switch-btn {
+      padding: 10px 18px; border-radius: 10px; font-size: 14px;
+      font-weight: 600; cursor: pointer; border: 1px solid transparent;
+      display: flex; align-items: center; gap: 8px; transition: all 0.2s;
+    }
+    .switch-btn.active {
+      background: #0284c7; color: white;
+      border-color: #38bdf8; box-shadow: 0 0 16px rgba(56, 189, 248, 0.4);
+    }
+    .switch-btn.inactive {
+      background: #1e293b; color: #94a3b8;
+    }
+
+    .container {
+      display: grid; grid-template-columns: 320px 1fr; gap: 24px;
+    }
+    .sidebar {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 16px; padding: 18px; height: fit-content;
+    }
+    .sidebar h3 { font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 12px; }
+    .case-item {
+      background: #090d16; border: 1px solid var(--card-border);
+      border-radius: 10px; padding: 12px 14px; margin-bottom: 10px;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .case-item:hover { border-color: var(--accent); }
+    .case-item.active {
+      border-color: var(--accent); background: rgba(56, 189, 248, 0.08);
+    }
+    .case-item h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .case-item p { font-size: 12px; color: var(--text-muted); }
+
+    .main-content {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 16px; padding: 24px;
+    }
+    .report-banner {
+      background: #090d16; border: 1px solid var(--card-border);
+      border-radius: 12px; padding: 18px; margin-bottom: 24px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .banner-title h2 { font-size: 20px; font-weight: 700; }
+    .banner-title p { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+    .badge {
+      padding: 6px 14px; border-radius: 20px; font-size: 12px;
+      font-weight: 700; text-transform: uppercase;
+    }
+    .badge-critical { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid #ef4444; }
+    .badge-warning { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid #f59e0b; }
+    .badge-success { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid #10b981; }
+
+    /* Cards Grid */
+    .cards-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 18px;
+    }
+    .bio-card {
+      background: #090d16; border: 1px solid var(--card-border);
+      border-radius: 14px; padding: 18px; transition: all 0.2s;
+    }
+    .bio-card:hover { border-color: rgba(56, 189, 248, 0.4); }
+    .bio-header {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin-bottom: 12px;
+    }
+    .bio-title { font-size: 16px; font-weight: 700; }
+    .bio-val { font-size: 18px; font-weight: 800; font-family: 'JetBrains Mono', monospace; }
+    .bio-section { margin-top: 12px; }
+    .bio-label { font-size: 12px; text-transform: uppercase; color: var(--text-muted); font-weight: 700; }
+    .bio-desc { font-size: 13px; color: #cbd5e1; margin-top: 4px; line-height: 1.5; }
+    
+    .schedule-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 16px;
+    }
+    .schedule-slot {
+      background: #090d16; border: 1px solid var(--card-border);
+      border-radius: 12px; padding: 14px;
+    }
+    .schedule-slot h4 { font-size: 13px; color: var(--accent); margin-bottom: 8px; text-transform: uppercase; }
+    .schedule-slot ul { list-style: none; font-size: 13px; color: #cbd5e1; }
+    .schedule-slot li { margin-bottom: 6px; }
+
+    .warning-box {
+      background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 12px; padding: 14px 18px; margin-bottom: 20px;
+    }
+    .warning-box h4 { color: #ef4444; font-size: 14px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+    .warning-box p { font-size: 13px; color: #fca5a5; line-height: 1.5; }
+
+    .questions-box {
+      background: #090d16; border: 1px solid #2e2640; border-radius: 14px;
+      padding: 18px; margin-top: 24px;
+    }
+    .questions-box h3 { color: var(--purple); font-size: 15px; margin-bottom: 12px; }
+    .questions-box ol { margin-left: 20px; font-size: 13px; color: #cbd5e1; line-height: 1.8; }
+
+    .table-view {
+      width: 100%; border-collapse: collapse; margin-top: 12px;
+      font-size: 13px;
+    }
+    .table-view th {
+      text-align: left; padding: 10px; border-bottom: 1px solid var(--card-border);
+      color: var(--text-muted); font-size: 12px; text-transform: uppercase;
+    }
+    .table-view td {
+      padding: 12px 10px; border-bottom: 1px solid #141c2e;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="logo-area">
+      <div class="logo-badge">P</div>
+      <div class="title-box">
+        <h1>PatientPulse AI — Medical Intelligence Platform</h1>
+        <p>Zero-Jargon Lab Report & Doctor Prescription Plain-English Decipher Engine</p>
+      </div>
+    </div>
+    <div class="nav-tabs">
+      <a href="xray_viewer.html" style="text-decoration:none;"><button class="nav-btn">🩻 Universal X-Ray Engine</button></a>
+      <button class="nav-btn active">🧪 Lab & Prescription Decipherer</button>
+    </div>
+  </div>
+
+  <div class="view-switcher-bar">
+    <div>
+      <h3 style="font-size: 15px; font-weight: 700;">Active Perspective View</h3>
+      <p style="font-size: 12px; color: var(--text-muted);">Toggle between zero-jargon patient explanations and specialist clinical data</p>
+    </div>
+    <div class="switcher-btns">
+      <button class="switch-btn active" id="btn-patient" onclick="setViewMode('PATIENT')">
+        💡 Patient Plain-English Decipher
+      </button>
+      <button class="switch-btn inactive" id="btn-doctor" onclick="setViewMode('DOCTOR')">
+        👨‍⚕️ Clinical Specialist View
+      </button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="sidebar">
+      <h3>Select Medical Document</h3>
+      <div id="case-list"></div>
+    </div>
+
+    <div class="main-content" id="report-view">
+      <!-- Dynamic render -->
+    </div>
+  </div>
+
+  <script>
+    const DATA = {
+  "lab_cases": [
+    {
+      "id": "LAB-001",
+      "title": "Comprehensive Blood & Metabolic Panel (John Doe)",
+      "type": "LAB_REPORT",
+      "data": {
+        "status": "SUCCESS",
+        "metadata": {
+          "report_title": "METROPOLIS CLINICAL LABORATORY REPORT",
+          "patient_name": "John Doe",
+          "patient_age": "38",
+          "patient_gender": "Male",
+          "doctor_name": "Dr. A. K. Sharma, MD",
+          "date": "28-Aug-2026",
+          "clinical_impression": "Mild Anemia, Elevated Fasting Blood Glucose & Borderline TSH."
+        },
+        "triage": {
+          "level": "MILD_OBSERVATION",
+          "badge": "[CAUTION] Follow-Up Advised (Multiple Values Out of Range)",
+          "color_code": "#f59e0b",
+          "total_metrics_tested": 7,
+          "abnormal_metrics_count": 5,
+          "critical_metrics_count": 0
+        },
+        "summary_text": "Detected 5 biomarker(s) outside standard target ranges. Review with your healthcare provider.",
+        "biomarkers": [
+          {
+            "metric_data": {
+              "test_name": "Hemoglobin",
+              "value": 10.2,
+              "unit": "g/dL",
+              "reference_range": "13.0 - 17.0",
+              "flag": "LOW"
+            },
+            "patient_decipher": {
+              "test_name": "Hemoglobin (Oxygen-Carrying Blood Protein)",
+              "observed_value": "10.2 g/dL",
+              "reference_range": "13.0 - 17.0",
+              "status_badge": {
+                "label": "Below Standard Range (Low)",
+                "color": "#3b82f6",
+                "flag": "LOW"
+              },
+              "what_it_does": "Hemoglobin is the iron-rich protein packed inside your red blood cells. Its primary job is to carry oxygen from your lungs to every organ and muscle in your entire body.",
+              "what_your_result_means": "Your hemoglobin level is below standard reference range, which indicates anemia. When hemoglobin is low, your organs receive slightly less oxygen than optimal, which frequently causes fatigue, cold hands/feet, or mild dizziness.",
+              "diet_and_lifestyle_guidance": "For low levels: consume iron-rich foods like spinach, lentils, beans, poultry, and pair them with vitamin C (citrus fruits) to boost absorption. Avoid tea or coffee immediately with meals as tannins hinder iron uptake.",
+              "questions_for_doctor": [
+                "What is the underlying cause of this hemoglobin reading (iron deficiency, vitamin deficiency, or other)?",
+                "Do you recommend a ferritin (iron stores) or vitamin B12 test before starting supplements?",
+                "Should I take a daily iron supplement, and what formulation causes the least stomach sensitivity?"
+              ]
+            }
+          },
+          {
+            "metric_data": {
+              "test_name": "Total RBC Count",
+              "value": 3.8,
+              "unit": "10^6/uL",
+              "reference_range": "4.5 - 5.5",
+              "flag": "LOW"
+            },
+            "patient_decipher": {
+              "test_name": "Red Blood Cell Count (RBC)",
+              "observed_value": "3.8 10^6/uL",
+              "reference_range": "4.5 - 5.5",
+              "status_badge": {
+                "label": "Below Standard Range (Low)",
+                "color": "#3b82f6",
+                "flag": "LOW"
+              },
+              "what_it_does": "Red blood cells are the physical courier cells in your bloodstream that transport oxygen and nutrients to tissues and haul carbon dioxide back to your lungs.",
+              "what_your_result_means": "A lower red blood cell count indicates that your bone marrow is producing fewer blood cells, or cells are being lost more quickly than replaced, contributing to anemia.",
+              "diet_and_lifestyle_guidance": "Stay consistently hydrated with plenty of water. Incorporate leafy greens, folate, and B-vitamins in your daily diet.",
+              "questions_for_doctor": [
+                "Does my RBC count correlate with my hemoglobin and iron indices?",
+                "Could dehydration or fluid intake have influenced this number on test day?",
+                "When should I repeat this complete blood count to check for stabilization?"
+              ]
+            }
+          },
+          {
+            "metric_data": {
+              "test_name": "Fasting Blood Glucose",
+              "value": 142.0,
+              "unit": "mg/dL",
+              "reference_range": "70 - 99",
+              "flag": "HIGH"
+            },
+            "patient_decipher": {
+              "test_name": "Fasting Blood Sugar (Glucose)",
+              "observed_value": "142.0 mg/dL",
+              "reference_range": "70 - 99",
+              "status_badge": {
+                "label": "Above Standard Range (High)",
+                "color": "#f59e0b",
+                "flag": "HIGH"
+              },
+              "what_it_does": "Glucose is the main type of sugar in your blood and is the body's primary energy fuel for cells and brain function.",
+              "what_your_result_means": "Your fasting glucose is elevated. A reading between 100\u2013125 mg/dL suggests prediabetes, while 126 mg/dL or higher on two occasions indicates diabetes. This means your body is having trouble moving sugar from blood into cells.",
+              "diet_and_lifestyle_guidance": "Focus on high-fiber whole grains, legumes, and lean proteins while cutting back on sweetened drinks, refined flours, and sugary desserts. Take a brisk 20-minute walk after meals to help muscles absorb glucose.",
+              "questions_for_doctor": [
+                "Do you recommend checking an HbA1c test (3-month blood sugar average) to confirm this trend?",
+                "Are there dietary changes or physical activity goals I should begin right away?",
+                "Should I start monitoring my blood sugar at home with a handheld glucometer?"
+              ]
+            }
+          },
+          {
+            "metric_data": {
+              "test_name": "Total Cholesterol",
+              "value": 228.0,
+              "unit": "mg/dL",
+              "reference_range": "< 200",
+              "flag": "HIGH"
+            },
+            "patient_decipher": {
+              "test_name": "Total Cholesterol (Blood Fats)",
+              "observed_value": "228.0 mg/dL",
+              "reference_range": "< 200",
+              "status_badge": {
+                "label": "Above Standard Range (High)",
+                "color": "#f59e0b",
+                "flag": "HIGH"
+              },
+              "what_it_does": "Cholesterol is a waxy, fat-like substance that your liver produces. It is needed to build cell walls and make hormones, but excess amounts can cling to arterial walls.",
+              "what_your_result_means": "Total cholesterol is higher than 200 mg/dL. Over years, excess circulating blood fats can contribute to plaque build-up in blood vessels (atherosclerosis).",
+              "diet_and_lifestyle_guidance": "Reduce saturated fats (butter, deep-fried snacks, fatty red meats) and replace them with heart-healthy unsaturated fats (olive oil, walnuts, avocados, chia seeds, oats, flaxseed).",
+              "questions_for_doctor": [
+                "What were my individual LDL ('bad') and HDL ('good') numbers, and what is my overall cardiac risk score?",
+                "Can I lower this through 3 months of dietary adjustments and aerobic exercise before considering medication?",
+                "Would you recommend a Coronary Calcium Score or carotid ultrasound scan?"
+              ]
+            }
+          },
+          {
+            "metric_data": {
+              "test_name": "Serum TSH",
+              "value": 6.8,
+              "unit": "uIU/mL",
+              "reference_range": "0.4 - 4.2",
+              "flag": "HIGH"
+            },
+            "patient_decipher": {
+              "test_name": "Thyroid Stimulating Hormone (TSH)",
+              "observed_value": "6.8 uIU/mL",
+              "reference_range": "0.4 - 4.2",
+              "status_badge": {
+                "label": "Above Standard Range (High)",
+                "color": "#f59e0b",
+                "flag": "HIGH"
+              },
+              "what_it_does": "TSH is released by your brain's pituitary gland to command your thyroid gland how much energy-regulating thyroid hormones (T3 and T4) to produce. Think of it like a gas pedal.",
+              "what_your_result_means": "An elevated TSH indicates an underactive thyroid (hypothyroidism). Your brain is shouting louder with extra TSH because the thyroid gland is sluggish. Common signs include unexplained fatigue, dry skin, feeling easily chilled, or sluggish metabolism.",
+              "diet_and_lifestyle_guidance": "Ensure balanced iodine and selenium intake (Brazil nuts, eggs, fish). Avoid extreme fad diets that stress hormone production.",
+              "questions_for_doctor": [
+                "Do you recommend testing Free T4, Free T3, and Thyroid Antibodies (Anti-TPO) to confirm thyroid health?",
+                "Could my current symptoms (tiredness, cold sensitivity, hair thinning) be connected to this TSH reading?",
+                "Is thyroid hormone replacement (e.g. Levothyroxine) recommended at this stage?"
+              ]
+            }
+          },
+          {
+            "metric_data": {
+              "test_name": "Serum Creatinine",
+              "value": 0.95,
+              "unit": "mg/dL",
+              "reference_range": "0.7 - 1.3",
+              "flag": "NORMAL"
+            },
+            "patient_decipher": {
+              "test_name": "Serum Creatinine (Kidney Filter Efficiency)",
+              "observed_value": "0.95 mg/dL",
+              "reference_range": "0.7 - 1.3",
+              "status_badge": {
+                "label": "Healthy Target Range (Normal)",
+                "color": "#10b981",
+                "flag": "NORMAL"
+              },
+              "what_it_does": "Creatinine is a natural waste product created from everyday muscle breakdown. Healthy kidneys filter almost all of it out of the bloodstream and eliminate it through urine.",
+              "what_your_result_means": "Your result of 0.95 mg/dL is right in the healthy, standard target range. Your body is managing this biomarker effectively.",
+              "diet_and_lifestyle_guidance": "Drink plenty of water daily to maintain kidney blood flow. Avoid frequent use of over-the-counter NSAID painkillers (like ibuprofen) which reduce blood flow to kidney tissue.",
+              "questions_for_doctor": [
+                "What is my estimated Glomerular Filtration Rate (eGFR) based on this creatinine value?",
+                "Could dehydration, vigorous weight training, or high protein intake have temporarily spiked this value?",
+                "Do you advise a routine urine test (Urine Albumin-to-Creatinine Ratio) to check for microscopic protein leakage?"
+              ]
+            }
+          },
+          {
+            "metric_data": {
+              "test_name": "Serum SGPT",
+              "value": 28.0,
+              "unit": "U/L",
+              "reference_range": "7 - 56",
+              "flag": "NORMAL"
+            },
+            "patient_decipher": {
+              "test_name": "SGPT / ALT (Liver Cell Enzyme)",
+              "observed_value": "28.0 U/L",
+              "reference_range": "7 - 56",
+              "status_badge": {
+                "label": "Healthy Target Range (Normal)",
+                "color": "#10b981",
+                "flag": "NORMAL"
+              },
+              "what_it_does": "ALT (Alanine Aminotransferase) is an enzyme found primarily inside liver cells. When liver cells experience inflammation or stress, ALT leaks out into the bloodstream.",
+              "what_your_result_means": "Your result of 28.0 U/L is right in the healthy, standard target range. Your body is managing this biomarker effectively.",
+              "diet_and_lifestyle_guidance": "Minimize alcohol intake, reduce sugary high-fructose corn syrup foods, and focus on physical fitness to reverse fatty liver changes.",
+              "questions_for_doctor": [
+                "Could fatty liver or any medications/supplements I take be irritating my liver enzymes?",
+                "Do you recommend a liver ultrasound to look for fat accumulation?",
+                "When should we recheck ALT and AST to verify if levels return to normal?"
+              ]
+            }
+          }
+        ],
+        "database_logging": {
+          "status": "saved_locally",
+          "error": "[Errno 11001] getaddrinfo failed"
+        }
+      }
+    },
+    {
+      "id": "LAB-002",
+      "title": "Hematology CBC Panel with Leukocytosis (Michael Chang)",
+      "type": "LAB_REPORT",
+      "data": {
+        "status": "SUCCESS",
+        "metadata": {
+          "report_title": "Complete Blood Count",
+          "patient_name": "Michael Chang",
+          "patient_age": "29",
+          "patient_gender": "Male",
+          "doctor_name": "Dr. K. Patel",
+          "date": "03-Sep-2026",
+          "clinical_impression": "Leukocytosis with neutrophilic predominance, indicative of acute bacterial response."
+        },
+        "triage": {
+          "level": "CRITICAL_URGENT",
+          "badge": "[CRITICAL] Immediate Physician Review Recommended",
+          "color_code": "#ef4444",
+          "total_metrics_tested": 13,
+          "abnormal_metrics_count": 6,
+          "critical_metrics_count": 2
+        },
+        "summary_text": "This report contains 2 critical biomarker reading(s) that require prompt clinical consultation.",
+        "biomarkers": [
+          {
+            "metric_data": {
+              "test_name": "White Blood Cell Count",
+              "value": 14.8,
+              "unit": "10^3/uL",
+              "reference_range": "4.5 - 11.0",
+              "flag": "HIGH"
+            },
+            "patient_decipher": {
+              "test_name": "White Blood Cell Count (Immune Defense)",
+              "observed_value": "14.8 10^3/uL",
+              "reference_range": "4.5 - 11.0",
+              "status_badge": {
+                "label": "Above Standard Range (High)",
+                "color": "#f59e0b",
+                "flag": "HIGH"
+              },
+              "what_it_does": "White blood cells are your immune system's primary front-line defense soldiers that fight off bacterial infections, viruses, and inflammation.",
+              "what_your_result_means": "Elevated WBC (leukocytosis) signals that your immune system is currently actively fighting off an infection, systemic inflammation, or physical stress.",
+              "diet_and_lifestyle_guidance": "Prioritize 8 hours of restorative sleep, drink warm fluids, practice good hand hygiene, and rest to support immune recovery.",
+              "questions_for_doctor": [
+                "Does my differential count (neutrophils vs lymphocytes) point toward a bacterial or viral infection?",
+                "Are antibiotics needed based on this WBC elevation and my current physical symptoms?",
+                "When should we re-test to ensure the immune count has settled back down?"
+              ]
+            }
+          },
+          {
+            "metric_data": {
+              "test_name": "Red Blood Cell Count",
+              "value": 4.92,
+              "unit": "10^6/uL",
+              "reference_range": "4.35 - 5.65",
+              "flag": "NORMAL"
+            },
+            "patient_decipher": {
+              "test_name": "Red Blood Cell Count Test",
+              "observed_value": "4.92 10^6/uL",
+              "reference_range": "4.35 - 5.65",
+              "status_badge": {
+                "label": "Healthy Target Range (Normal)",
+                "color": "#10b981",
+                "flag": "NORMAL"
+              },
+              "what_it_does": "This test measures the concentration of Red Blood Cell Count circulating in your blood.",
+              "what_your_result_means": "Your result of 4.92 10^6/uL is right in the healthy, standard target range. Your body is managing this biomarker effectively.",
+              "diet_and_lifestyle_guidance": "Maintain a nutritious, balanced diet and follow up with your physician to discuss this finding.",
+              "questions_for_doctor": [
+                "How does this Red Blood Cell Count result relate to my current physical symptoms?",
+                "Do you recommend a repeat test in a few weeks to verify stability?",
+                "What lifestyle modifications or medications would you recommend?"
+              ]
+            }
+          },
+          {
+            "metric_data": {
+              "test_name": "Hemoglobin",
+              "value": 14.6,
+              "unit": "g/dL",
+              "reference_range": "13.2 - 16.6",
+              "flag": "NORMAL"
+            },
+            "patient_decipher": {
+              "test_name": "Hemoglobin (Oxygen-Carrying Blood Protein)",
+              "observed_value": "14.6 g/dL",
+              "reference_range": "13.2 - 16.6",
+              "status_badge": {
+                "label": "Healthy Target Range (Normal)",
+                "color": "#10b981",
+                "flag": "NORMAL"
+              },
+              "what_it_does": "Hemoglobin is the iron-rich protein packed inside your red blood cells. Its primary job is to carry oxygen from your lungs to every organ and muscle in your entire body.",
+              "what_your_result_means": "Your result of 14.6 g/dL is right in the healthy, standard target range. Your body is managing this biomarker effectively.",
+              "diet_and_lifestyle_guidance": "For low levels: consume iron-rich foods like spinach, lentils, beans, poultry, and pair them with vitamin C (citrus fruits) to boost absorption. Avoid tea or coffee immediately with meals as tannins hinder iron uptake.",
+              "questions_for_doctor": [
+                "What is the underlying cause of this hemoglobin reading (iron deficiency, vitamin deficiency, or other)?",
+                "Do you recommend a ferritin (iron stores) or vitamin B12 test before starting supplements?",
+                "Should I take a daily iron supplement, and what formulation causes the least stomach sensitivity?"
+              ]
+            }
+          },
+          {
+            "metric_data": {
+              "test_name": "Hematocrit",
+              "value": 43.8,
+              "unit": "%",
+              "reference_range": "38.3 - 48.6",
+              "flag": "NORMAL"
+            },
+            "patient_decipher": {
+              "test_name": "Hematocrit Test",
+              "observed_value": "43.8 %",
+              "reference_range": "38.3 - 48.6",
+              "status_badge": {
+                "label": "Healthy Target Range (Normal)",
+                "color": "#10b981",
+                "flag": "NORMAL"
+              },
+              "what_it_does": "This test measures the concentration of Hematocrit circulating in your blood.",
+              "what_your_result_means": "Your result of 43.8 % is right in the healthy, standard target range. Your body is managing this biomarker effectively.",
+              "diet_and_lifestyle_guidance": "Maintain a nutritious, balanced diet and follow up with your physician to discuss this finding.",
+              "questions_for_doctor": [
+                "How does this Hematocrit result relate to my current physical symptoms?",
+                "Do you recommend a repeat test in a few weeks to verify stability?",
+                "What lifestyle modifications or medications would you recommend?"
+              ]
+            }
+          },
+          {
+            "metric_data": {
+              "test_name": "Mean Corpuscular Volume",
+              "value": 89.0,
+              "unit": "fL",
+              "reference_range": "80.0 - 100.0",
+              "flag": "NORMAL"
+            },
+            "patient_decipher": {
+              "test_name": "Mean Corpuscular Volume Test",
+              "observed_value": "89.0 fL",
+              "reference_range": "80.0 - 100.0",
+              "status_badge": {
+                "label": "Healthy Target Range (Normal)",
+                "color": "#10b981",
+                "flag": "NORMAL"
+              },
+              "what_it_does": "This test measures the concentration of Mean Corpuscular Volume circulating in your blood.",
+              "what_your_result_means": "Your result of 89.0 fL is right in the healthy, standard target range. Your body is managing this biomarker effectively.",
+              "diet_and_lifestyle_guidance": "Maintain a nutritious, balanced diet and follow up with your physician to discuss this finding.",
+              "questions_for_doctor": [
+                "How does this Mean Corpuscular Volume result relate to my current physical symptoms?",
+                "Do you recommend a repeat test in a few weeks to verify stability?",
+                "What lifestyle modifications or medications would you recommend?"
+              ]
+            }
+          },
+          {
+            "metric_data": {
+              "test_name": "Mean Corpuscular Hemoglobin",
+              "value": 29.7,
+              "unit": "pg",
+              "reference_range": "27.0 - 33.0",
+              "flag": "CRITICAL_HIGH"
+            },
+            "patient_decipher": {
+              "test_name": "Hemoglobin (Oxygen-Carrying Blood Protein)",
+              "observed_value": "29.7 pg",
+              "reference_range": "27.0 - 33.0",
+              "status_badge": {
+                "label": "Critically Elevated \u2014 Urgent Attention",
+                "color": "#ef4444",
+                "flag": "CRITICAL_HIGH"
+              },
+              "what_it_does": "Hemoglobin is the iron-rich protein packed inside your red blood cells. Its primary job is to carry oxygen from your lungs to every organ and muscle in your entire body.",
+              "what_your_result_means": "Your hemoglobin is elevated. This can happen when your body needs to compensate for lower oxygen levels (e.g. smoking, high altitudes, sleep apnea), or from simple dehydration where blood becomes more concentrated.",
+              "diet_and_lifestyle_guidance": "For low levels: consume iron-rich foods like spinach, lentils, beans, poultry, and pair them with vitamin C (citrus fruits) to boost absorption. Avoid tea or coffee immediately with meals as tannins hinder iron uptake.",
+              "questions_for_doctor": [
+                "What is the underlying cause of this hemoglobin reading (iron deficiency, vitamin deficiency, or other)?",
+                "Do you recommend a ferritin (iron stores) or vitamin B12 test before starting supplements?",
+                "Should I take a daily iron supplement, and what formulation causes the least stomach sensitivity?"
+              ]
+            }
+          },
+          {
+            "metric_data": {
+              "test_name": "Mean Corpuscular Hemoglobin Concentration",
+              "value": 33.3,
+              "unit": "g/dL",
+              "reference_range": "32.0 - 36.0",
+              "flag": "CRITICAL_HIGH"
+            },
+            "patient_decipher": {
+              "test_name": "Hemoglobin (Oxygen-Carrying Blood Protein)",
+              "observed_value": "33.3 g/dL",
+              "reference_range": "32.0 - 36.0",
+              "status_badge": {
+                "label": "Critically Elevated \u2014 Urgent Attention",
+                "color": "#ef4444",
+                "flag": "CRITICAL_HIGH"
+              },
+              "what_it_does": "Hemoglobin is the iron-rich protein packed inside your red blood cells. Its primary job is to carry oxygen from your lungs to every organ and muscle in your entire body.",
+              "what_your_result_means": "Your hemoglobin is elevated. This can happen when your body needs to compensate for lower oxygen levels (e.g. smoking, high altitudes, sleep apnea), or from simple dehydration where blood becomes more concentrated.",
+              "diet_and_lifestyle_guidance": "For low levels: consume iron-rich foods like spinach, lentils, beans, poultry, and pair them with vitamin C (citrus fruits) to boost absorption. Avoid tea or coffee immediately with meals as tannins hinder iron uptake.",
+              "questions_for_doctor": [
+                "What is the underlying cause of this hemoglobin reading (iron deficiency, vitamin deficiency, or other)?",
+                "Do you recommend a ferritin (iron stores) or vitamin B12 test before starting supplements?",
+                "Should I take a daily iron supplement, and what formulation causes the least stomach sensitivity?"
+              ]
+            }
+          },
+          {
+            "metric_data": {
+              "test_name": "Platelet Count",
+              "value": 284.0,
+              "unit": "10^3/uL",
+              "reference_range": "150 - 450",
+              "flag": "NORMAL"
+            },
+            "patient_decipher": {
+              "test_name": "Platelets (Clotting Cells)",
+              "observed_value": "284.0 10^3/uL",
+              "reference_range": "150 - 450",
+              "status_badge": {
+                "label": "Healthy Target Range (Normal)",
+                "color": "#10b981",
+                "flag": "NORMAL"
+              },
+              "what_it_does": "Platelets are microscopic cell fragments that cluster together to form plugs and stop bleeding whenever a blood vessel is injured.",
+              "what_your_result_means": "Your result of 284.0 10^3/uL is right in the healthy, standard target range. Your body is managing this biomarker effectively.",
+              "diet_and_lifestyle_guidance": "Consume nutrient-dense foods (papaya leaf extract, kiwi, pumpkin, vitamins A & C). Avoid activities with high risk of severe trauma if platelets are low.",
+              "questions_for_doctor": [
+                "Is my platelet level stable or dropping compared to earlier tests?",
+                "Are there any signs of abnormal bruising or bleeding I should watch for at home?",
+                "Should I avoid aspirin or blood-thinning painkillers right now?"
+              ]
+            }
+          },
+          {
+            "metric_data": {
+              "test_name": "Neutrophils Percentage",
+              "value": 78.2,
+              "unit": "%",
+              "reference_range": "40.0 - 70.0",
+              "flag": "HIGH"
+            },
+            "patient_decipher": {
+              "test_name": "Neutrophils Percentage Test",
+              "observed_value": "78.2 %",
+              "reference_range": "40.0 - 70.0",
+              "status_badge": {
+                "label": "Above Standard Range (High)",
+                "color": "#f59e0b",
+                "flag": "HIGH"
+              },
+              "what_it_does": "This test measures the concentration of Neutrophils Percentage circulating in your blood.",
+              "what_your_result_means": "Your Neutrophils Percentage level of 78.2 % is above the standard laboratory reference range.",
+              "diet_and_lifestyle_guidance": "Maintain a nutritious, balanced diet and follow up with your physician to discuss this finding.",
+              "questions_for_doctor": [
+                "How does this Neutrophils Percentage result relate to my current physical symptoms?",
+                "Do you recommend a repeat test in a few weeks to verify stability?",
+                "What lifestyle modifications or medications would you recommend?"
+              ]
+            }
+          },
+          {
+            "metric_data": {
+              "test_name": "Lymphocytes Percentage",
+              "value": 14.5,
+              "unit": "%",
+              "reference_range": "20.0 - 40.0",
+              "flag": "LOW"
+            },
+            "patient_decipher": {
+              "test_name": "Lymphocytes Percentage Test",
+              "observed_value": "14.5 %",
+              "reference_range": "20.0 - 40.0",
+              "status_badge": {
+                "label": "Below Standard Range (Low)",
+                "color": "#3b82f6",
+                "flag": "LOW"
+              },
+              "what_it_does": "This test measures the concentration of Lymphocytes Percentage circulating in your blood.",
+              "what_your_result_means": "Your Lymphocytes Percentage level of 14.5 % is below the standard laboratory reference range.",
+              "diet_and_lifestyle_guidance": "Maintain a nutritious, balanced diet and follow up with your physician to discuss this finding.",
+              "questions_for_doctor": [
+                "How does this Lymphocytes Percentage result relate to my current physical symptoms?",
+                "Do you recommend a repeat test in a few weeks to verify stability?",
+                "What lifestyle modifications or medications would you recommend?"
+              ]
+            }
+          },
+          {
+            "metric_data": {
+              "test_name": "Monocytes Percentage",
+              "value": 6.1,
+              "unit": "%",
+              "reference_range": "2.0 - 8.0",
+              "flag": "NORMAL"
+            },
+            "patient_decipher": {
+              "test_name": "Monocytes Percentage Test",
+              "observed_value": "6.1 %",
+              "reference_range": "2.0 - 8.0",
+              "status_badge": {
+                "label": "Healthy Target Range (Normal)",
+                "color": "#10b981",
+                "flag": "NORMAL"
+              },
+              "what_it_does": "This test measures the concentration of Monocytes Percentage circulating in your blood.",
+              "what_your_result_means": "Your result of 6.1 % is right in the healthy, standard target range. Your body is managing this biomarker effectively.",
+              "diet_and_lifestyle_guidance": "Maintain a nutritious, balanced diet and follow up with your physician to discuss this finding.",
+              "questions_for_doctor": [
+                "How does this Monocytes Percentage result relate to my current physical symptoms?",
+                "Do you recommend a repeat test in a few weeks to verify stability?",
+                "What lifestyle modifications or medications would you recommend?"
+              ]
+            }
+          },
+          {
+            "metric_data": {
+              "test_name": "Eosinophils Percentage",
+              "value": 0.9,
+              "unit": "%",
+              "reference_range": "1.0 - 4.0",
+              "flag": "LOW"
+            },
+            "patient_decipher": {
+              "test_name": "Eosinophils Percentage Test",
+              "observed_value": "0.9 %",
+              "reference_range": "1.0 - 4.0",
+              "status_badge": {
+                "label": "Below Standard Range (Low)",
+                "color": "#3b82f6",
+                "flag": "LOW"
+              },
+              "what_it_does": "This test measures the concentration of Eosinophils Percentage circulating in your blood.",
+              "what_your_result_means": "Your Eosinophils Percentage level of 0.9 % is below the standard laboratory reference range.",
+              "diet_and_lifestyle_guidance": "Maintain a nutritious, balanced diet and follow up with your physician to discuss this finding.",
+              "questions_for_doctor": [
+                "How does this Eosinophils Percentage result relate to my current physical symptoms?",
+                "Do you recommend a repeat test in a few weeks to verify stability?",
+                "What lifestyle modifications or medications would you recommend?"
+              ]
+            }
+          },
+          {
+            "metric_data": {
+              "test_name": "Basophils Percentage",
+              "value": 0.3,
+              "unit": "%",
+              "reference_range": "0.0 - 1.5",
+              "flag": "NORMAL"
+            },
+            "patient_decipher": {
+              "test_name": "Basophils Percentage Test",
+              "observed_value": "0.3 %",
+              "reference_range": "0.0 - 1.5",
+              "status_badge": {
+                "label": "Healthy Target Range (Normal)",
+                "color": "#10b981",
+                "flag": "NORMAL"
+              },
+              "what_it_does": "This test measures the concentration of Basophils Percentage circulating in your blood.",
+              "what_your_result_means": "Your result of 0.3 % is right in the healthy, standard target range. Your body is managing this biomarker effectively.",
+              "diet_and_lifestyle_guidance": "Maintain a nutritious, balanced diet and follow up with your physician to discuss this finding.",
+              "questions_for_doctor": [
+                "How does this Basophils Percentage result relate to my current physical symptoms?",
+                "Do you recommend a repeat test in a few weeks to verify stability?",
+                "What lifestyle modifications or medications would you recommend?"
+              ]
+            }
+          }
+        ],
+        "database_logging": {
+          "status": "saved_locally",
+          "error": "[Errno 11001] getaddrinfo failed"
+        }
+      }
+    }
+  ],
+  "rx_cases": [
+    {
+      "id": "RX-001",
+      "title": "Doctor Shorthand Prescription (Sarah Jenkins)",
+      "type": "PRESCRIPTION",
+      "data": {
+        "status": "SUCCESS",
+        "document_type": "DOCTOR_PRESCRIPTION_SLIP",
+        "metadata": {
+          "doctor_name": "Dr. R. V. Patel, MD (Internal Medicine)",
+          "clinic_hospital": "Outpatient Medical Services",
+          "patient_name": "Sarah Jenkins",
+          "patient_age": "42",
+          "date": "30-Aug-2026"
+        },
+        "confidence": {
+          "score": 0.92,
+          "percentage": "92.0%",
+          "needs_human_verification": false,
+          "warning_message": null
+        },
+        "medicines_count": 3,
+        "medicines": [
+          {
+            "name": "Amoxicillin",
+            "dosage": "500mg",
+            "dosage_form": "Tablet",
+            "frequency": "Once daily (Every 24 hours)",
+            "abbreviation": "OD",
+            "timing": "In the morning with breakfast",
+            "duration": "5 days",
+            "instructions": "Take 1 tablet once daily (every 24 hours), in the morning with breakfast for 5 days."
+          },
+          {
+            "name": "Metformin",
+            "dosage": "850mg",
+            "dosage_form": "Tablet",
+            "frequency": "Once daily (Every 24 hours)",
+            "abbreviation": "OD",
+            "timing": "Before meals (Empty stomach)",
+            "duration": "As prescribed",
+            "instructions": "Take 1 tablet once daily (every 24 hours), before meals (empty stomach) for as prescribed."
+          },
+          {
+            "name": "Paracetamol",
+            "dosage": "650mg",
+            "dosage_form": "Tablet",
+            "frequency": "As needed (Only when acute symptoms or fever arise)",
+            "abbreviation": "SOS",
+            "timing": "Before meals (Empty stomach)",
+            "duration": "As prescribed",
+            "instructions": "Take 1 tablet as needed (only when acute symptoms or fever arise), before meals (empty stomach) for as prescribed."
+          }
+        ],
+        "food_and_safety_warnings": [
+          "Antibiotic Safety Alert: Avoid consuming dairy products (milk, yogurt, cheese) or calcium-fortified juices within 2 hours of this dose, as calcium severely reduces antibiotic absorption. Always finish the full course even if you feel completely recovered.",
+          "Gastrointestinal Precaution: Always take this medication with or immediately after a substantial meal (e.g. breakfast or dinner) to avoid stomach upset, nausea, or abdominal cramping.",
+          "Liver & Stomach Precaution: Avoid alcohol while taking pain or fever reducers. If taking NSAIDs (Ibuprofen/Diclofenac), always take after food to protect the stomach lining. Do not exceed recommended daily limits."
+        ],
+        "patient_friendly_guide": {
+          "plain_title": "Your Prescription Plan (3 Medications)",
+          "treatment_overview": "Your doctor has prescribed: Amoxicillin, Metformin, Paracetamol. Always adhere to the timing and finish complete courses as instructed.",
+          "daily_schedule": {
+            "morning_breakfast": [
+              "Amoxicillin (500mg) \u2014 In the morning with breakfast",
+              "Metformin (850mg) \u2014 Before meals (Empty stomach)",
+              "Paracetamol (650mg) \u2014 AS NEEDED ONLY (if symptoms or fever flare up)"
+            ],
+            "afternoon_lunch": [
+              "No midday medications scheduled."
+            ],
+            "evening_dinner": [
+              "No evening medications scheduled."
+            ],
+            "bedtime_night": [
+              "No bedtime medications scheduled."
+            ]
+          },
+          "food_safety_alerts": [
+            "Antibiotic Safety Alert: Avoid consuming dairy products (milk, yogurt, cheese) or calcium-fortified juices within 2 hours of this dose, as calcium severely reduces antibiotic absorption. Always finish the full course even if you feel completely recovered.",
+            "Gastrointestinal Precaution: Always take this medication with or immediately after a substantial meal (e.g. breakfast or dinner) to avoid stomach upset, nausea, or abdominal cramping.",
+            "Liver & Stomach Precaution: Avoid alcohol while taking pain or fever reducers. If taking NSAIDs (Ibuprofen/Diclofenac), always take after food to protect the stomach lining. Do not exceed recommended daily limits."
+          ],
+          "questions_for_pharmacist": [
+            "Should any of these medications be stored in the refrigerator, or kept at room temperature?",
+            "Are there any specific side effects (like drowsiness, nausea, or dizziness) I should be prepared for?",
+            "What should I do if I accidentally miss a scheduled dose?"
+          ]
+        },
+        "database_logging": {
+          "status": "saved_locally",
+          "error": "[Errno 11001] getaddrinfo failed"
+        }
+      }
+    },
+    {
+      "id": "RX-002",
+      "title": "Clinical Outpatient Antibiotic Slip (Emily Watson)",
+      "type": "PRESCRIPTION",
+      "data": {
+        "status": "SUCCESS",
+        "document_type": "DOCTOR_PRESCRIPTION_SLIP",
+        "metadata": {
+          "doctor_name": "Dr. Marcus Vance, MD (Infectious Diseases)",
+          "clinic_hospital": "General Health Medical Center",
+          "patient_name": "Patient Name",
+          "patient_age": "Not Specified",
+          "date": "02-Sep-2026"
+        },
+        "confidence": {
+          "score": 0.92,
+          "percentage": "92.0%",
+          "needs_human_verification": false,
+          "warning_message": null
+        },
+        "medicines_count": 3,
+        "medicines": [
+          {
+            "name": "Amoxicillin",
+            "dosage": "500mg",
+            "dosage_form": "Capsule",
+            "frequency": "Three times daily (Every 8 hours)",
+            "abbreviation": "TID",
+            "timing": "After meals with water",
+            "duration": "7 days",
+            "instructions": "Take 1 capsule three times daily (every 8 hours), after meals with water for 7 days."
+          },
+          {
+            "name": "Paracetamol",
+            "dosage": "650mg",
+            "dosage_form": "Tablet",
+            "frequency": "As needed (When necessary)",
+            "abbreviation": "PRN",
+            "timing": "Before meals (Empty stomach)",
+            "duration": "As prescribed",
+            "instructions": "Take 1 tablet as needed (when necessary), before meals (empty stomach) for as prescribed."
+          },
+          {
+            "name": "Cetirizine",
+            "dosage": "10mg",
+            "dosage_form": "Tablet",
+            "frequency": "At bedtime (Before sleep)",
+            "abbreviation": "QHS",
+            "timing": "At bedtime before sleeping",
+            "duration": "5 days",
+            "instructions": "Take 1 tablet at bedtime (before sleep), at bedtime before sleeping for 5 days."
+          }
+        ],
+        "food_and_safety_warnings": [
+          "Antibiotic Safety Alert: Avoid consuming dairy products (milk, yogurt, cheese) or calcium-fortified juices within 2 hours of this dose, as calcium severely reduces antibiotic absorption. Always finish the full course even if you feel completely recovered.",
+          "Liver & Stomach Precaution: Avoid alcohol while taking pain or fever reducers. If taking NSAIDs (Ibuprofen/Diclofenac), always take after food to protect the stomach lining. Do not exceed recommended daily limits."
+        ],
+        "patient_friendly_guide": {
+          "plain_title": "Your Prescription Plan (3 Medications)",
+          "treatment_overview": "Your doctor has prescribed: Amoxicillin, Paracetamol, Cetirizine. Always adhere to the timing and finish complete courses as instructed.",
+          "daily_schedule": {
+            "morning_breakfast": [
+              "Amoxicillin (500mg) \u2014 Morning with breakfast",
+              "Paracetamol (650mg) \u2014 AS NEEDED ONLY (if symptoms or fever flare up)"
+            ],
+            "afternoon_lunch": [
+              "Amoxicillin (500mg) \u2014 Afternoon with lunch"
+            ],
+            "evening_dinner": [
+              "Amoxicillin (500mg) \u2014 Night with dinner"
+            ],
+            "bedtime_night": [
+              "Cetirizine (10mg) \u2014 30 minutes before sleep"
+            ]
+          },
+          "food_safety_alerts": [
+            "Antibiotic Safety Alert: Avoid consuming dairy products (milk, yogurt, cheese) or calcium-fortified juices within 2 hours of this dose, as calcium severely reduces antibiotic absorption. Always finish the full course even if you feel completely recovered.",
+            "Liver & Stomach Precaution: Avoid alcohol while taking pain or fever reducers. If taking NSAIDs (Ibuprofen/Diclofenac), always take after food to protect the stomach lining. Do not exceed recommended daily limits."
+          ],
+          "questions_for_pharmacist": [
+            "Should any of these medications be stored in the refrigerator, or kept at room temperature?",
+            "Are there any specific side effects (like drowsiness, nausea, or dizziness) I should be prepared for?",
+            "What should I do if I accidentally miss a scheduled dose?"
+          ]
+        },
+        "database_logging": {
+          "status": "saved_locally",
+          "error": "[Errno 11001] getaddrinfo failed"
+        }
+      }
+    }
+  ]
+};
+    let currentMode = "PATIENT";
+    let activeCase = DATA.lab_cases[0];
+
+    function setViewMode(mode) {
+      currentMode = mode;
+      document.getElementById("btn-patient").className = mode === "PATIENT" ? "switch-btn active" : "switch-btn inactive";
+      document.getElementById("btn-doctor").className = mode === "DOCTOR" ? "switch-btn active" : "switch-btn inactive";
+      renderActiveCase();
+    }
+
+    function selectCase(type, id) {
+      if (type === "LAB_REPORT") {
+        activeCase = DATA.lab_cases.find(c => c.id === id);
+      } else {
+        activeCase = DATA.rx_cases.find(c => c.id === id);
+      }
+      renderSidebar();
+      renderActiveCase();
+    }
+
+    function renderSidebar() {
+      const list = document.getElementById("case-list");
+      let html = `<div style="margin-bottom: 12px; font-size: 12px; font-weight:700; color: #38bdf8;">LAB & BLOOD TESTS (DAY 4 NLP)</div>`;
+      
+      DATA.lab_cases.forEach(c => {
+        const isAct = activeCase.id === c.id;
+        html += `
+          <div class="case-item ${isAct ? 'active' : ''}" onclick="selectCase('LAB_REPORT', '${c.id}')">
+            <h4>${c.title}</h4>
+            <p>${c.data.triage.badge}</p>
+          </div>
+        `;
+      });
+
+      html += `<div style="margin: 16px 0 8px 0; font-size: 12px; font-weight:700; color: #8b5cf6;">DOCTOR PRESCRIPTIONS (DAY 3 OCR)</div>`;
+      DATA.rx_cases.forEach(c => {
+        const isAct = activeCase.id === c.id;
+        html += `
+          <div class="case-item ${isAct ? 'active' : ''}" onclick="selectCase('PRESCRIPTION', '${c.id}')">
+            <h4>${c.title}</h4>
+            <p>${c.data.medicines_count} Medicines • ${c.data.confidence.percentage} Conf</p>
+          </div>
+        `;
+      });
+
+      list.innerHTML = html;
+    }
+
+    function renderActiveCase() {
+      const container = document.getElementById("report-view");
+      if (activeCase.type === "LAB_REPORT") {
+        renderLabReport(activeCase.data, container);
+      } else {
+        renderPrescription(activeCase.data, container);
+      }
+    }
+
+    function renderLabReport(data, el) {
+      const badgeCls = data.triage.level === "CRITICAL_URGENT" ? "badge-critical" : (data.triage.level === "MILD_OBSERVATION" ? "badge-warning" : "badge-success");
+
+      let html = `
+        <div class="report-banner">
+          <div class="banner-title">
+            <h2>${data.metadata.report_title}</h2>
+            <p>Patient: <strong>${data.metadata.patient_name}</strong> | Ordering Physician: <strong>${data.metadata.doctor_name}</strong> | Date: ${data.metadata.date}</p>
+          </div>
+          <span class="badge ${badgeCls}">${data.triage.badge}</span>
+        </div>
+      `;
+
+      if (currentMode === "PATIENT") {
+        html += `
+          <div class="warning-box" style="background: rgba(56, 189, 248, 0.08); border-color: rgba(56, 189, 248, 0.3);">
+            <h4 style="color: #38bdf8;">💡 Plain-English Executive Summary</h4>
+            <p style="color: #e2e8f0;">${data.summary_text}</p>
+          </div>
+
+          <div class="cards-grid">
+        `;
+
+        data.biomarkers.forEach(b => {
+          const m = b.metric_data;
+          const d = b.patient_decipher;
+          const flagColor = m.flag === "HIGH" ? "#f59e0b" : (m.flag === "LOW" ? "#3b82f6" : "#10b981");
+
+          html += `
+            <div class="bio-card" style="border-left: 4px solid ${flagColor};">
+              <div class="bio-header">
+                <div>
+                  <div class="bio-title">${d.test_name}</div>
+                  <div style="font-size: 12px; color: var(--text-muted); margin-top:2px;">Target: ${d.reference_range}</div>
+                </div>
+                <div class="bio-val" style="color: ${flagColor};">${d.observed_value}</div>
+              </div>
+              <span class="badge" style="background: rgba(255,255,255,0.06); color: ${flagColor};">${d.status_badge.label}</span>
+              
+              <div class="bio-section">
+                <div class="bio-label">What This Test Does</div>
+                <div class="bio-desc">${d.what_it_does}</div>
+              </div>
+
+              <div class="bio-section">
+                <div class="bio-label">What Your Result Means</div>
+                <div class="bio-desc">${d.what_your_result_means}</div>
+              </div>
+
+              <div class="bio-section">
+                <div class="bio-label">Diet & Lifestyle Tip</div>
+                <div class="bio-desc">${d.diet_and_lifestyle_guidance}</div>
+              </div>
+            </div>
+          `;
+        });
+
+        html += `</div>`;
+
+        // 3 Questions box from first abnormal biomarker
+        const firstAbnormal = data.biomarkers.find(b => b.metric_data.flag !== "NORMAL") || data.biomarkers[0];
+        html += `
+          <div class="questions-box">
+            <h3>💬 3 Smart Questions To Ask Your Doctor at Your Next Visit</h3>
+            <ol>
+              ${firstAbnormal.patient_decipher.questions_for_doctor.map(q => `<li>${q}</li>`).join("")}
+            </ol>
+          </div>
+        `;
+
+      } else {
+        // Doctor Specialist Table View
+        html += `
+          <h3 style="font-size: 16px; margin-bottom: 12px;">Clinical Diagnostic Table (Extracted by Bio_ClinicalBERT)</h3>
+          <table class="table-view">
+            <thead>
+              <tr>
+                <th>Investigation</th>
+                <th>Observed Value</th>
+                <th>Unit</th>
+                <th>Reference Range</th>
+                <th>Diagnostic Flag</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${data.biomarkers.map(b => `
+                <tr>
+                  <td><strong>${b.metric_data.test_name}</strong></td>
+                  <td style="font-family:'JetBrains Mono'; font-weight:700;">${b.metric_data.value}</td>
+                  <td>${b.metric_data.unit}</td>
+                  <td style="color: var(--text-muted);">${b.metric_data.reference_range}</td>
+                  <td><span class="badge" style="color:${b.metric_data.flag==='NORMAL'?'#10b981':'#ef4444'}">${b.metric_data.flag}</span></td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+          <div style="margin-top: 20px; font-size: 13px; color: var(--text-muted);">
+            <strong>Clinical Impression:</strong> ${data.metadata.clinical_impression || "Standard outpatient screening."}
+          </div>
+        `;
+      }
+
+      el.innerHTML = html;
+    }
+
+    function renderPrescription(data, el) {
+      const guide = data.patient_friendly_guide;
+      let html = `
+        <div class="report-banner">
+          <div class="banner-title">
+            <h2>${data.document_type.replace(/_/g, ' ')}</h2>
+            <p>Prescribing Physician: <strong>${data.metadata.doctor_name}</strong> | Clinic: <strong>${data.metadata.clinic_hospital}</strong></p>
+          </div>
+          <span class="badge badge-success">OCR Confidence: ${data.confidence.percentage}</span>
+        </div>
+      `;
+
+      if (data.food_and_safety_warnings.length > 0) {
+        html += `
+          <div class="warning-box">
+            <h4>⚠️ Critical Food & Drug Safety Alerts</h4>
+            ${data.food_and_safety_warnings.map(w => `<p style="margin-bottom: 6px;">• ${w}</p>`).join("")}
+          </div>
+        `;
+      }
+
+      if (currentMode === "PATIENT") {
+        html += `
+          <h3 style="font-size: 16px; margin-bottom: 8px;">${guide.plain_title}</h3>
+          <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">${guide.treatment_overview}</p>
+
+          <h4 style="font-size: 14px; text-transform: uppercase; color: var(--accent); margin-top: 20px;">📅 Daily Medication Timetable</h4>
+          <div class="schedule-grid">
+            <div class="schedule-slot">
+              <h4>🌅 Morning (Breakfast)</h4>
+              <ul>${guide.daily_schedule.morning_breakfast.map(m => `<li>• ${m}</li>`).join("")}</ul>
+            </div>
+            <div class="schedule-slot">
+              <h4>☀️ Midday (Lunch)</h4>
+              <ul>${guide.daily_schedule.afternoon_lunch.map(m => `<li>• ${m}</li>`).join("")}</ul>
+            </div>
+            <div class="schedule-slot">
+              <h4>🌆 Evening (Dinner)</h4>
+              <ul>${guide.daily_schedule.evening_dinner.map(m => `<li>• ${m}</li>`).join("")}</ul>
+            </div>
+            <div class="schedule-slot">
+              <h4>🌙 Bedtime (Night)</h4>
+              <ul>${guide.daily_schedule.bedtime_night.map(m => `<li>• ${m}</li>`).join("")}</ul>
+            </div>
+          </div>
+
+          <div class="questions-box">
+            <h3>💬 3 Questions to Ask Your Pharmacist</h3>
+            <ol>
+              ${guide.questions_for_pharmacist.map(q => `<li>${q}</li>`).join("")}
+            </ol>
+          </div>
+        `;
+      } else {
+        // Doctor / Pharmacist View
+        html += `
+          <h3 style="font-size: 16px; margin-bottom: 12px;">Deciphered Medication List (TrOCR / Layout Parsing)</h3>
+          <table class="table-view">
+            <thead>
+              <tr>
+                <th>Medicine</th>
+                <th>Dosage</th>
+                <th>Form</th>
+                <th>Frequency</th>
+                <th>Timing</th>
+                <th>Duration</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${data.medicines.map(m => `
+                <tr>
+                  <td><strong>${m.name}</strong></td>
+                  <td style="font-family:'JetBrains Mono'; font-weight:700;">${m.dosage}</td>
+                  <td>${m.dosage_form}</td>
+                  <td>${m.frequency} (${m.abbreviation})</td>
+                  <td>${m.timing}</td>
+                  <td>${m.duration}</td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        `;
+      }
+
+      el.innerHTML = html;
+    }
+
+    // Initial render
+    renderSidebar();
+    renderActiveCase();
+  </script>
+</body>
+</html>
