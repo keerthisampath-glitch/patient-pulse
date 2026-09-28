@@ -31,9 +31,18 @@ import numpy as np
 from PIL import Image, ImageDraw
 import torch
 import torchvision
-import skimage.io
-import matplotlib
-import matplotlib.cm as cm
+try:
+    import skimage.io
+except ImportError:
+    skimage = None
+
+try:
+    import matplotlib
+    import matplotlib.cm as cm
+except ImportError:
+    matplotlib = None
+    cm = None
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -42,7 +51,7 @@ load_dotenv()
 try:
     import torchxrayvision as xrv
 except ImportError:
-    raise ImportError("torchxrayvision not installed. Run: pip install torchxrayvision")
+    xrv = None
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 HEATMAP_DIR = os.path.join(BASE_DIR, "Data", "processed", "heatmaps")
@@ -475,8 +484,13 @@ class XRayPathologyPredictor:
         cam_img = Image.fromarray((cam_norm * 255).astype(np.uint8)).resize((512, 512), Image.BICUBIC)
         cam_up = np.array(cam_img, dtype=np.float32) / 255.0
 
-        colormap = matplotlib.colormaps["jet"]
-        heatmap_rgba = colormap(cam_up)  # Shape (512, 512, 4) with values in [0.0, 1.0]
+        if matplotlib is not None:
+            colormap = matplotlib.colormaps["jet"]
+            heatmap_rgba = colormap(cam_up)  # Shape (512, 512, 4) with values in [0.0, 1.0]
+        else:
+            heatmap_rgba = np.zeros((512, 512, 4), dtype=np.float32)
+            heatmap_rgba[:, :, 0] = cam_up
+            heatmap_rgba[:, :, 1] = cam_up * 0.5
 
         # Transparent alpha: below 0.20 is 100% transparent (alpha = 0)
         # Above 0.20 ramps smoothly to vibrant 0.70 opacity
