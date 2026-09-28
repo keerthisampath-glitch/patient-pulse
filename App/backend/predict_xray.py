@@ -431,7 +431,7 @@ class XRayPathologyPredictor:
                 }
             }
 
-            models = ["gemini-flash-latest", "gemini-flash-lite-latest", "gemini-3.5-flash-lite"]
+            models = ["gemini-1.5-flash-latest", "gemini-1.5-flash-8b-latest"]
             for m in models:
                 url = f"https://generativelanguage.googleapis.com/v1beta/models/{m}:generateContent?key={self.gemini_api_key}"
                 req = urllib.request.Request(
