@@ -412,6 +412,17 @@ class MedicalNLPService:
         """
         Lazily loads HuggingFace Bio_ClinicalBERT pipeline if locally cached.
         """
+        is_cloud = (
+            os.getenv("DEPLOYMENT_MODE", "local").strip().lower() == "cloud" or
+            os.getenv("RENDER", "").strip().lower() == "true" or
+            bool(os.getenv("RENDER_SERVICE_ID"))
+        )
+        if is_cloud:
+            print("[NLP Service] Cloud Deployment Mode active. Bypassing heavy local BioBERT to prevent OOM.")
+            self.biobert_pipeline = None
+            self._biobert_attempted = True
+            return None
+
         if self.biobert_pipeline is not None or self._biobert_attempted:
             return self.biobert_pipeline
 

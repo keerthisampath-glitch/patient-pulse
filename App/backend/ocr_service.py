@@ -132,6 +132,18 @@ class PrescriptionOCRService:
         Lazily attempts to load HuggingFace TrOCR model if not already loaded.
         Catches memory or download issues and falls back gracefully.
         """
+        is_cloud = (
+            os.getenv("DEPLOYMENT_MODE", "local").strip().lower() == "cloud" or
+            os.getenv("RENDER", "").strip().lower() == "true" or
+            bool(os.getenv("RENDER_SERVICE_ID"))
+        )
+        if is_cloud:
+            print("[OCR Service] Cloud Deployment Mode active. Bypassing heavy local TrOCR to prevent OOM.")
+            self.trocr_model = None
+            self.trocr_processor = None
+            self._trocr_attempted = True
+            return None
+
         if self.trocr_model is not None or self._trocr_attempted:
             return self.trocr_model
 
