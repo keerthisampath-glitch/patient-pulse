@@ -85,7 +85,7 @@ Interactive Swagger API documentation will be available at: `http://127.0.0.1:80
 ### 3. Open Interactive Web Demonstrators
 * **Universal X-Ray & Bounding Box Inspector**: Open [`App/frontend/xray_viewer.html`](App/frontend/xray_viewer.html) in your browser.
 * **Lab Report & Prescription Decipherer**: Open [`App/frontend/lab_decipher_viewer.html`](App/frontend/lab_decipher_viewer.html) in your browser.
-
+    https://patient-pulse.onrender.com
 ---
 
 ## 🛡️ License & Medical Disclaimer
