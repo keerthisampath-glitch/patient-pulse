@@ -24,9 +24,14 @@ chroma_db/
 # Uploaded Raw Files
 Data/raw/*
 !Data/raw/.gitkeep
+!Data/raw/chest_xrays/
+Data/raw/chest_xrays/*
 !Data/raw/chest_xrays/00000001_000.png
+
 Data/processed/*
 !Data/processed/.gitkeep
+!Data/processed/heatmaps/
+Data/processed/heatmaps/*
 !Data/processed/heatmaps/gradcam_atelectasis_64.png
 
 # IDE
